@@ -1,5 +1,3 @@
-package Proyecto;
-
 public class WesternMoon {
 
     public static void main(String[] args) {
