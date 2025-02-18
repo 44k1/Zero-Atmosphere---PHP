@@ -1,8 +1,14 @@
+import java.util.*;
+
 public class WesternMoon {
 
     public static void main(String[] args) {
 
-        System.out.println("Aquí empieza el proyecto");
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Introduzca el número esperado de alienígenas: ");
+        int numEsperadoAliens = sc.nextInt();
+        System.out.println("");
 
     }
 
