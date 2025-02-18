@@ -1,3 +1,3 @@
-public class Humano {
+public class Humano extends Entidad {
     
 }

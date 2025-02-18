@@ -1,3 +1,3 @@
-public class Pajaro {
+public class Pajaro extends Mascota{
     
 }

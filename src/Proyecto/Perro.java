@@ -1,3 +1,3 @@
-public class Perro {
+public class Perro extends Mascota{
     
 }

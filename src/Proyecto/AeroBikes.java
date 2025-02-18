@@ -1,3 +1,3 @@
-public class Aerobikes {
+public class AeroBikes extends MedioTransporte{
     
 }

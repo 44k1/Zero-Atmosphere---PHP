@@ -1,3 +1,3 @@
-public abstract class Mediotransporte {
+public abstract class MedioTransporte extends Entidad{
     
 }

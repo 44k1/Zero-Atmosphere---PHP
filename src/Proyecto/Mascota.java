@@ -1,4 +1,4 @@
-public abstract class Mascota {
+public abstract class Mascota extends Entidad {
     
 }
 

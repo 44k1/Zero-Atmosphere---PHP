@@ -1,3 +1,3 @@
-public class Minero {
+public class Minero  extends Humano {
     
 }
