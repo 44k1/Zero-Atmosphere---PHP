@@ -28,9 +28,19 @@ public class WesternMoon {
         }
         System.out.println("Introduzca el número de aerocars a utilizar: ");
         int numAerocarsUtilizar = sc.nextInt();
-        
+
+        // Cálculo de costes
+        // Número de elementos por número yurs multiplicado por 3 (dias de la operación)
+        float costes = (3 * (numMineros * 20)) + (3 * (numSoldados * 22)) + (3 * (numEsperadoAliens * 4));
 
     }
 
-}
+    public String costesOperacion(int numEsperadoAliens, float distanciaAñosLuz, int numSoldados, int numMineros,
+            int numAerocarsUtilizar) {
+        return "< ---------- COSTES DE LA OPERACIÓN ---------- >\n\nDistancia de la nave DKW-RR.3: " + distanciaAñosLuz
+                + " años luz\nNúmero de alienígenas encontrados durante la operación: " + numEsperadoAliens
+                + "\nNúmero de soldados en la nave: " + numSoldados + "\nNúmero de mineros en la nave: " + numMineros
+                + "";
+    }
 
+}
