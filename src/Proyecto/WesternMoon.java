@@ -1,21 +1,4 @@
 import java.util.*;
-<<<<<<< HEAD
-
-public class WesternMoon {
-
-    public static void main(String[] args) {
-
-        Scanner sc = new Scanner(System.in);
-
-        System.out.println("Introduzca el número esperado de alienígenas: ");
-        int numEsperadoAliens = sc.nextInt();
-        System.out.println("");
-
-    }
-
-}
-=======
->>>>>>> b47ba7a49ba56f00f0fa1b84dc2e0cd0a062e087
 
 public class WesternMoon {
 
