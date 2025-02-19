@@ -1,12 +1,19 @@
+
+
 public class Humano extends Entidad {
     int edad;
     String genero;
-    String rango;
-    public Humano(String nombre, String id,int edad, String genero, String rango){
-        super(nombre, id);
+    public Humano(String nombre,int edad, String genero){
+        super(nombre);
         this.edad=edad;
         this.genero=genero;
-        this.rango=rango;
+
     }
     public Humano(){}
+
+    @Override
+    public String toString() {
+        
+        return Humano.class.getName()+" -- " + super.toString() +" Edad: " + edad + " Genero: " + genero;
+    }
 }
