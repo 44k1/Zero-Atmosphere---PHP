@@ -8,6 +8,6 @@ public class TripulantePredefinido  extends Humano{
     @Override
     public String toString() {
         
-        return TripulantePredefinido.class.getName()+" -- " + " Nombre:" + nombre + " Edad: " + edad + " Genero: "+ genero +" Edad: " + edad + " Genero: " + genero;
+        return TripulantePredefinido.class.getName()+" -- " + " Nombre:" + nombre + " Edad: " + edad + " Genero: "+ genero;
     }
 }

@@ -9,6 +9,6 @@ public class Minero  extends Humano {
     @Override
     public String toString() {
         
-        return Minero.class.getName()+" -- " + " Nombre:" + nombre + " Edad: " + edad + " Genero: "+ genero +" Edad: " + edad + " Genero: " + genero;
+        return Minero.class.getName()+" -- " + " Nombre:" + nombre + " Edad: " + edad + " Genero: "+ genero;
     }
 }

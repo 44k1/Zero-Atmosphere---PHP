@@ -9,6 +9,6 @@ public class Soldado extends Entidad{
     @Override
     public String toString() {
         
-        return Minero.class.getName()+ " -- " + super.toString() + " Rango: " + rango;
+        return Soldado.class.getName()+ " -- " + super.toString() + " Rango: " + rango;
     }
 }
