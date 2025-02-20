@@ -1,5 +1,3 @@
-
-
 public class Humano extends Entidad {
     int edad;
     String genero;

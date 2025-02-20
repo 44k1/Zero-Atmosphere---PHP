@@ -1,10 +1,9 @@
-public class PropietarioMascota {
-    private String nombre;
-    private String direccion;
+public class PropietarioMascota extends Entidad {
+    String direccion;
     private String telefono;
     
     public PropietarioMascota(String nombre, String direccion, String telefono) {
-        this.nombre = nombre;
+        super(nombre);
         this.direccion = direccion;
         this.telefono = telefono;
     }
@@ -20,4 +19,11 @@ public class PropietarioMascota {
     public String getTelefono() {
         return telefono;
     }
+    
+    @Override
+    public String toString() {
+       
+        return PropietarioMascota.class.getName()+ " -- " + super.toString() + " Telefono: " + telefono + " Direccion: " + direccion;
+    }
 }
+

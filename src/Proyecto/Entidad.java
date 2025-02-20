@@ -16,5 +16,13 @@ public abstract class Entidad {
         return "WM" + contador;
         
     }
+
+    public String getNombre() {
+        return nombre;
+    }
+    public String getId() {
+        return nombre;
+    }
 }
+
 
