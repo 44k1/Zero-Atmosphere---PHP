@@ -5,9 +5,9 @@ public abstract class Entidad {
     public String toString(){
         return "Nombre: " + nombre + " ID: " + id;
     }
-    public Entidad(String nombre, String id){
+    public Entidad(String nombre){
         this.nombre=nombre;
-        this.id=id;
+        this.id=generarId();
     }
     public Entidad(){}
 
