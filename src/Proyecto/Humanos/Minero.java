@@ -1,5 +1,3 @@
-
-
 public class Minero  extends Humano {
     public Minero(){}
     public Minero(String nombre, int edad, String genero){

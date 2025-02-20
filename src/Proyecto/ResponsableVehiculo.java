@@ -31,3 +31,4 @@ public class ResponsableVehiculo extends Entidad {
         return ResponsableVehiculo.class.getName()+ " -- " + super.toString() + " Telefono: " + telefono + " Direccion: " + direccion;
     }
 }
+

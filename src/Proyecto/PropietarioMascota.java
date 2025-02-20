@@ -26,3 +26,4 @@ public class PropietarioMascota extends Entidad {
         return PropietarioMascota.class.getName()+ " -- " + super.toString() + " Telefono: " + telefono + " Direccion: " + direccion;
     }
 }
+

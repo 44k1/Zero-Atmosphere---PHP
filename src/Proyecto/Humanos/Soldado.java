@@ -1,5 +1,3 @@
-
-
 public class Soldado extends Entidad{
     String rango;
     public Soldado(String nombre, String rango){
