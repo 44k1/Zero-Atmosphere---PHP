@@ -1,22 +1,15 @@
-public class AeroCars extends MedioTransporte{
-    static int contador=0;
 public class AeroCars extends MedioTransporte {
+    static int contador = 0;
     int numPropulsores;
     int caballosDePotencia;
     boolean esDeCombate;
-    public AeroCars(){}
-    public AeroCars(String nombre,int numPlazas,String tipoCombustible, int maxCombustible,int kilometraje,ResponsableVehiculo rVehiculo,int numPropulsores,int caballosDePotencia,boolean esDeCombate){
-        super(nombre,numPlazas, tipoCombustible,  maxCombustible, kilometraje,rVehiculo);
-        this.numPropulsores=numPropulsores;
-        this.caballosDePotencia=caballosDePotencia;
-        this.esDeCombate=esDeCombate;
 
     public AeroCars() {
     }
 
-    public AeroCars(int numPlazas, String tipoCombustible, int maxCombustible, int kilometraje,
+    public AeroCars(String nombre, int numPlazas, String tipoCombustible, int maxCombustible, int kilometraje,
             ResponsableVehiculo rVehiculo, int numPropulsores, int caballosDePotencia, boolean esDeCombate) {
-        super(numPlazas, tipoCombustible, maxCombustible, kilometraje, rVehiculo);
+        super(nombre, numPlazas, tipoCombustible, maxCombustible, kilometraje, rVehiculo);
         this.numPropulsores = numPropulsores;
         this.caballosDePotencia = caballosDePotencia;
         this.esDeCombate = esDeCombate;
