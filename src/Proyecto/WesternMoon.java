@@ -22,7 +22,7 @@ public class WesternMoon {
                 while (numEsperadoAliens < 0) {
                     System.out.println(
                             "ERROR --> El valor a introducir no puede ser un número negativo, por favor, inténtelo de nuevo");
-                    sc.nextLine();
+                    sc.nextLine(); // Limpiar buffer
                     System.out.println("Introduzca el número esperado de alienígenas: ");
                     numEsperadoAliens = sc.nextInt();
                 }
@@ -30,7 +30,7 @@ public class WesternMoon {
                 break;
             } catch (InputMismatchException e) {
                 System.out.println("ERROR --> Se debe de introducir un número entero, por favor, inténtelo de nuevo");
-                sc.nextLine();
+                sc.nextLine(); // Limpiar buffer
             }
         }
 
@@ -73,53 +73,145 @@ public class WesternMoon {
             ListaSoldadosMineros.add(minero2);
         }
 
+        // Solicitud de datos al usuario
+        float distanciaAñosLuz;
+        while (true) {
+            try {
+                System.out.println("Introduzca la distancia en años luz de la nave DKW-RR.3: ");
+                distanciaAñosLuz = sc.nextFloat();
+                while (distanciaAñosLuz < 0) {
+                    System.out.println(
+                            "ERROR --> El valor a introducir no puede ser un número negativo, por favor, inténtelo de nuevo");
+                    sc.nextLine(); // Limpiar buffer
+                    System.out.println("Introduzca la distancia en años luz de la nave DKW-RR.3: ");
+                    distanciaAñosLuz = sc.nextInt();
+                }
+                sc.nextLine(); // Limpiar buffer
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println(
+                        "ERROR --> Se debe de introducir un número con un máximo de dos decimales, por favor, inténtelo de nuevo");
+            }
+        }
+        int numSoldados = 0;
+        while (true) {
+            try {
+                System.out.println(
+                        "Se va realizar un listado de soldados, introduzca la cantidad de soldados (Cantidad actual: "
+                                + (numEsperadoAliens * 2) + "): ");
+                numSoldados = sc.nextInt();
+                while (numSoldados < 0) {
+                    System.out.println(
+                            "ERROR --> El valor a introducir no puede ser un número negativo, por favor, inténtelo de nuevo");
+                    sc.nextLine(); // Limpiar buffer
+                    System.out.println(
+                            "Se va realizar un listado de soldados, introduzca la cantidad de soldados (Cantidad actual: "
+                                    + (numEsperadoAliens * 2) + "): ");
+                    numSoldados = sc.nextInt();
+                }
+                sc.nextLine(); // Limpiar Buffer
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println(
+                        "ERROR --> Se debe de introducir un número entero, por favor, inténtelo de nuevo");
+            }
+        }
+
+        // ArrayList del nombre de los soldados
+        for (int x = 0; x < numSoldados; x++) {
+            // Solicitud de atributos del soldado
+            System.out.println("Nombre del soldado número " + ((x + 1) + (numEsperadoAliens * 2)) + ": ");
+            String nombreSoldado = sc.nextLine();
+            System.out.println("Rango del soldado número " + ((x + 1) + (numEsperadoAliens * 2)) + ": ");
+            String rangoSoldado = sc.nextLine();
+            // Creación del soldado a partir de los atributos obtenidos
+            Soldado soldado3 = new Soldado(nombreSoldado, rangoSoldado);
+            // Se añade el soldado al ArrayList
+            ListaSoldadosMineros.add(soldado3);
+        }
+
+        // Solicitud de datos al usuario
+        int numMineros = 0;
+        while (true) {
+            try {
+                System.out.println(
+                        "Se va a realizar un listado de mineros, introduzca la cantidad de mineros (Cantidad actual: "
+                                + (numEsperadoAliens * 2) + "): ");
+                numMineros = sc.nextInt();
+                while (numMineros < 0) {
+                    System.out.println(
+                            "ERROR --> El valor a introducir no puede ser un número negativo, por favor, inténtelo de nuevo");
+                    sc.nextLine(); // Limpiar buffer
+                    System.out.println(
+                            "Se va a realizar un listado de mineros, introduzca la cantidad de mineros (Cantidad actual: "
+                                    + (numEsperadoAliens * 2) + "): ");
+                    numSoldados = sc.nextInt();
+                }
+                sc.nextLine(); // Limpiar Buffer
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println(
+                        "ERROR --> Se debe de introducir un número entero, por favor, inténtelo de nuevo");
+            }
+        }
+
+        // ArrayList del nombre de los mineros
+        for (int y = 0; y < numMineros; y++) {
+            // Solicitud de atributos del minero
+            System.out.println("Nombre del minero número " + ((y + 1) + (numEsperadoAliens * 2)) + ": ");
+            String nombreMinero = sc.nextLine();
+            int edadMinero = 0;
+            while (true) {
+                try {
+                    System.out.println("Edad del minero número " + ((y + 1) + (numEsperadoAliens * 2)) + ": ");
+                    edadMinero = sc.nextInt();
+                    while (edadMinero < 0) {
+                        System.out.println(
+                                "ERROR --> El valor a introducir no puede ser un número negativo, por favor, inténtelo de nuevo");
+                        sc.nextLine(); // Limpiar buffer
+                    }
+                    sc.nextLine();
+                    break;
+                } catch (InputMismatchException e) {
+                    System.out.println(
+                            "ERROR --> Se debe de introducir un número entero, por favor, inténtelo de nuevo");
+                }
+            }
+            System.out.println("Género del minero número " + ((y + 1) + (numEsperadoAliens * 2)) + ": ");
+            String generoMinero = sc.nextLine();
+            // Creación del minero a partir de los atributos obtenidos
+            Minero minero3 = new Minero(nombreMinero, edadMinero, generoMinero);
+            // Se añade el soldado al ArrayList
+            ListaSoldadosMineros.add(minero3);
+        }
+        int numAerocarsUtilizar = 0;
+        while (true) {
+            try {
+                System.out.println("Introduzca el número de aerocars a utilizar: ");
+                numAerocarsUtilizar = sc.nextInt();
+                while (numAerocarsUtilizar < 0) {
+                    System.out.println(
+                            "ERROR --> El valor a introducir no puede ser un número negativo, por favor, inténtelo de nuevo");
+                    sc.nextLine(); // Limpiar buffer
+                }
+                sc.nextLine();
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println(
+                        "ERROR --> Se debe de introducir un número entero, por favor, inténtelo de nuevo");
+            }
+        }
+
+        // Muestra en pantalla la información del array de mineros y soldados
+
         mostrarAtributos(ListaSoldadosMineros);
-
-        // Solicitud de datos al usuario
-        System.out.println("Introduzca la distancia en años luz de la nave DKW-RR.3: ");
-        float distanciaAñosLuz = sc.nextFloat();
-        System.out.println("Se va realizar un listado de soldados, introduzca la cantidad de soldados: ");
-        int numSoldados = sc.nextInt();
-        sc.nextLine(); // Limpiar Buffer
-
-        // Array del nombre de los soldados
-        String[] listaSoldatos = new String[numSoldados];
-        for (int x = 0; x < numSoldados; x++) {
-            System.out.println("Introduzca el nombre del soldado número " + (x + 1));
-            listaSoldatos[x] = sc.nextLine();
-        }
-
-        // Solicitud de datos al usuario
-        System.out.println("Se va a realizar un listado de mineros, introduzca la cantidad de mineros: ");
-        int numMineros = sc.nextInt();
-        sc.nextLine(); // Limpiar Buffer
-
-        // Array del nombre de los mineros
-
-        String[] listaMineros = new String[numMineros];
-        for (int y = 0; y < numMineros; y++) {
-            System.out.println("Introduzca el nombre del minero número " + (y + 1) + ": ");
-            listaMineros[y] = sc.nextLine();
-        }
-        System.out.println("Introduzca el número de aerocars a utilizar: ");
-        int numAerocarsUtilizar = sc.nextInt();
-
-        // Muestra en pantalla la información de los mineros y los soldados
-        System.out.println("< ---------- INFORMACIÓN DE SOLDADOS Y MINEROS ---------- >\n");
-
-        for (int x = 0; x < numSoldados; x++) {
-            System.out.println("Soldado " + (x + 1) + ": " + listaSoldatos[x]);
-        }
-
-        for (int y = 0; y < numMineros; y++) {
-            System.out.println("Minero " + (y + 1) + ": " + listaMineros[y]);
-        }
 
         System.out.println();
 
         // Muestra en pantalla los costes de operación
         System.out.println(
-                costesOperacion(numEsperadoAliens, distanciaAñosLuz, numSoldados, numMineros, numAerocarsUtilizar));
+                costesOperacion(numEsperadoAliens, distanciaAñosLuz, numSoldados, numMineros, numAerocarsUtilizar,
+                        ListaSoldadosMineros));
 
     }
 
@@ -128,13 +220,27 @@ public class WesternMoon {
     // GASTOS QUE HAN PROVOCADO
 
     public static String costesOperacion(int numEsperadoAliens, float distanciaAñosLuz, int numSoldados, int numMineros,
-            int numAerocarsUtilizar) {
+            int numAerocarsUtilizar, ArrayList<Entidad> arraylist) {
+
+        float yursSoldados = 0;
+        float yursMineros = 0;
+        for (Entidad objeto : arraylist) {
+            if (objeto instanceof Soldado) {
+                yursSoldados = yursSoldados + 22;
+            } else {
+                yursMineros = yursMineros + 20;
+            }
+        }
+
         return "< ---------- COSTES DE LA OPERACIÓN ---------- >\n\nDistancia de la nave DKW-RR.3: " + distanciaAñosLuz
                 + " años luz\nNúmero de alienígenas encontrados durante la operación: " + numEsperadoAliens + " + "
-                + 3 * (numEsperadoAliens * 4) + "\nNúmero de soldados en la nave: " + numSoldados + " + "
-                + 3 * (numSoldados * 22) + "\nNúmero de mineros en la nave: " + numMineros + " + "
-                + 3 * (numMineros * 20) + "\nNúmero de aerocars utilizados durante la operación: " + numAerocarsUtilizar
-                + "\n\nTOTAL: " + ((3 * (numMineros * 20)) + (3 * (numSoldados * 22)) + (3 * (numEsperadoAliens * 4)));
+                + (numEsperadoAliens * 4) + "yurs\nNúmero de soldados en la nave: "
+                + (numSoldados + (numEsperadoAliens * 2)) + " + "
+                + (yursSoldados * 3) + "yurs\nNúmero de mineros en la nave: " + (numMineros + (numEsperadoAliens * 2))
+                + " + "
+                + (yursMineros * 3) + "yurs\nNúmero de aerocars utilizados durante la operación: " + numAerocarsUtilizar
+                + "\n\nTOTAL: " + (((yursMineros * 3)) + (3 * yursSoldados) + (numEsperadoAliens * 4))
+                + " YURS < -----";
     }
 
     // FUNCIÓN ENCARGADA DE RECIBIR UN ARRAYLIST DE TIPO ENTIDAD QUE SE ENCARGA DE
@@ -143,7 +249,7 @@ public class WesternMoon {
     public static void mostrarAtributos(ArrayList<Entidad> arraylist) {
 
         int contador = 1;
-        System.out.println("< ---------- INFORMACIÓN DE MINEROS Y SOLDADOS ASIGNADOS POR ALIEN ---------- >\n");
+        System.out.println("< ---------- INFORMACIÓN DE MINEROS Y SOLDADOS ---------- >\n");
         for (Entidad objeto : arraylist) {
             System.out.println("Elemento " + contador + ": " + objeto.toString());
             contador++;
