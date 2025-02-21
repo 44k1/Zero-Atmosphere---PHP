@@ -1,4 +1,5 @@
 public abstract class Mascota extends Entidad {
+    static int contador=0;
    
     private PropietarioMascota propietario;
     

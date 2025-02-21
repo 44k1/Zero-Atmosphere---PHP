@@ -12,7 +12,7 @@ public class Humano extends Entidad {
     @Override
     public String toString() {
         //Busca el nombre de la clase humano con la funcion getName()
-        return Humano.class.getName()+" -- " + super.toString() +" Edad: " + edad + " Genero: " + genero;
+        return  super.toString() +" Edad: " + edad + " Genero: " + genero;
     }
 
 }

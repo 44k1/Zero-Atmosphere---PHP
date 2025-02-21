@@ -1,7 +1,7 @@
 public class PropietarioMascota extends Entidad {
     String direccion;
     private String telefono;
-    
+    static int contador=0;
     public PropietarioMascota(String nombre, String direccion, String telefono) {
         super(nombre);
         this.direccion = direccion;
