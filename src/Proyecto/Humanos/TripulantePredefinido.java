@@ -1,5 +1,3 @@
-
-
 public class TripulantePredefinido  extends Humano{
     public TripulantePredefinido(String nombre,int edad, String genero){
         super(nombre,edad,genero);
@@ -8,6 +6,6 @@ public class TripulantePredefinido  extends Humano{
     @Override
     public String toString() {
         
-        return TripulantePredefinido.class.getName()+" -- " + " Nombre:" + nombre + " Edad: " + edad + " Genero: "+ genero +" Edad: " + edad + " Genero: " + genero;
+        return TripulantePredefinido.class.getName()+" -- " + " Nombre:" + nombre + " Edad: " + edad + " Genero: "+ genero;
     }
 }

@@ -1,9 +1,27 @@
 public abstract class Mascota extends Entidad {
-    PropetarioMascota nPropetarioMascota;
+   
+    private PropietarioMascota propietario;
     
-    public Mascota(String nombre, String id, PropetarioMascota nPropetarioMascota){
+    public Mascota(String nombre) {
         super(nombre);
-        this.nPropetarioMascota = nPropetarioMascota;
+    }
+    
+    public void dormir() {
+        System.out.println(nombre + " está durmiendo.");
+    }
+    
+    public void comer() {
+        System.out.println(nombre + " está comiendo.");
+    }
+    
+    public abstract void comunicar();
+    
+    public void setPropietario(PropietarioMascota propietario) {
+        this.propietario = propietario;
+    }
+    
+    
+    public PropietarioMascota getPropietario() {
+        return propietario;
     }
 }
-
