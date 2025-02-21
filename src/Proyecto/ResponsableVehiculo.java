@@ -1,5 +1,6 @@
 public class ResponsableVehiculo extends Entidad {
     String direccion;
+    static int contador=0;
     private String telefono;
     String idResponsable;
     String nombreResponsable;
