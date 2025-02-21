@@ -1,4 +1,5 @@
 public abstract class MedioTransporte extends Entidad{
+    static int contador=0;
     int numPlazas;
     String tipoCombustible;
     int maxCombustible;
@@ -6,7 +7,8 @@ public abstract class MedioTransporte extends Entidad{
     
     ResponsableVehiculo rVehiculo;
     public MedioTransporte(){}
-    public MedioTransporte(int numPlazas,String tipoCombustible, int maxCombustible,int kilometraje,ResponsableVehiculo rVehiculo){
+    public MedioTransporte(String nombre,int numPlazas,String tipoCombustible, int maxCombustible,int kilometraje,ResponsableVehiculo rVehiculo){
+        super(nombre);
         this.numPlazas=numPlazas;
         this.tipoCombustible=tipoCombustible;
         this.maxCombustible=maxCombustible;
