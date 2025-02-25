@@ -145,7 +145,7 @@ public class WesternMoon {
         int contador = 1;
         System.out.println("< ---------- INFORMACIÓN DE MINEROS Y SOLDADOS ASIGNADOS POR ALIEN ---------- >\n");
         for (Entidad objeto : arraylist) {
-            System.out.println("Elemento " + contador + ": " + objeto.toString());
+            System.out.println("Elemento " + contador + ": " + objeto);
             contador++;
         }
         System.out.println();
