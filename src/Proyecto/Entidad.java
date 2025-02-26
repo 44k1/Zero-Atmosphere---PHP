@@ -29,7 +29,10 @@ public abstract class Entidad {
         this.nombre=nombre;
         this.id=generarId();
     }
-    public Entidad(){}
+    public Entidad(){
+        this.nombre=null;
+        this.id=generarId();
+    }
 
     private String generarId() {
         if (this instanceof Soldado) {
@@ -87,7 +90,7 @@ public abstract class Entidad {
         return nombre;
     }
     public String getId() {
-        return nombre;
+        return id;
     }
     public String getClassName(){
         return this.getClass().getSimpleName();

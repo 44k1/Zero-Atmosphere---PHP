@@ -1,5 +1,4 @@
 public class AeroBikes extends MedioTransporte{
-    static int contador=0;
     int numPropulsores;
     int numAlas;
     boolean esDeCombate;

@@ -3,10 +3,12 @@ import java.util.*;
 public class WesternMoon {
 
     public static void main(String[] args) {
-
-        // Creación del escaner
+        final String key = String.format("%016d", (long) (Math.random() * Math.pow(10, 16))) + String.format("%016d", (long) (Math.random() * Math.pow(10, 16)));
         Scanner sc = new Scanner(System.in);
-
+        System.out.println(key);
+        String passwdOperacion = null;
+        passwdOperacion=getPassOperacion(sc,key);
+        System.out.println(passwdOperacion);
         // Creación de los objetos tripulantes predefinidos
         TripulantePredefinido Laura = new TripulantePredefinido("Laura", 20, "Femenino");
         TripulantePredefinido Carmen = new TripulantePredefinido("Carmen", 30, "Femenino");
@@ -209,9 +211,8 @@ public class WesternMoon {
         System.out.println();
 
         // Muestra en pantalla los costes de operación
-        System.out.println(
                 costesOperacion(numEsperadoAliens, distanciaAñosLuz, numSoldados, numMineros, numAerocarsUtilizar,
-                        ListaSoldadosMineros));
+                        ListaSoldadosMineros, sc,passwdOperacion,key);
 
     }
 
@@ -219,9 +220,10 @@ public class WesternMoon {
     // MUESTRA EL NÚMERO DE ELEMENTOS QUE HAN PARTICIPADO EN LA OPERACIÓN Y LOS
     // GASTOS QUE HAN PROVOCADO
 
-    public static String costesOperacion(int numEsperadoAliens, float distanciaAñosLuz, int numSoldados, int numMineros,
-            int numAerocarsUtilizar, ArrayList<Entidad> arraylist) {
-
+    public static void costesOperacion(int numEsperadoAliens, float distanciaAñosLuz, int numSoldados, int numMineros,
+            int numAerocarsUtilizar, ArrayList<Entidad> arraylist, Scanner sc, String passwdOperacion, String nombreClase) {
+        System.out.println("¿Quieres guardar los costes de operación y encriptarlos? (true/false)");
+        boolean guardarOperacion = sc.nextBoolean();
         float yursSoldados = 0;
         float yursMineros = 0;
         for (Entidad objeto : arraylist) {
@@ -231,8 +233,7 @@ public class WesternMoon {
                 yursMineros = yursMineros + 20;
             }
         }
-
-        return "< ---------- COSTES DE LA OPERACIÓN ---------- >\n\nDistancia de la nave DKW-RR.3: " + distanciaAñosLuz
+        String resultado = "< ---------- COSTES DE LA OPERACIÓN ---------- >\n\nDistancia de la nave DKW-RR.3: " + distanciaAñosLuz
                 + " años luz\nNúmero de alienígenas encontrados durante la operación: " + numEsperadoAliens + " + "
                 + (numEsperadoAliens * 4) + "yurs\nNúmero de soldados en la nave: "
                 + (numSoldados + (numEsperadoAliens * 2)) + " + "
@@ -240,21 +241,46 @@ public class WesternMoon {
                 + " + "
                 + (yursMineros * 3) + "yurs\nNúmero de aerocars utilizados durante la operación: " + numAerocarsUtilizar
                 + "\n\nTOTAL: " + (((yursMineros * 3)) + (3 * yursSoldados) + (numEsperadoAliens * 4))
-                + " YURS < -----";
-    }
+                + " YURS";
+        System.out.println(resultado);
+    
+                if (guardarOperacion) {
+            
+
+                    // Encriptar el resultado y guardarlo en un archivo
+                    String encryptedResult = EncryptOperation.encrypt(resultado, DecryptOperation.decryptText(passwdOperacion,nombreClase)); // Cambia la clave según
+                                                                                                      // necesidad
+                    EncryptOperation.saveToFile("costesOperacion.txt", encryptedResult);
+                }
+        
+
+            }
 
     // FUNCIÓN ENCARGADA DE RECIBIR UN ARRAYLIST DE TIPO ENTIDAD QUE SE ENCARGA DE
     // MOSTRAR LOS ATRIBUTOS DE CADA OBJETO DENTRO DE EL CON EL MÉTODO TO STRING
-
+    
     public static void mostrarAtributos(ArrayList<Entidad> arraylist) {
 
         int contador = 1;
         System.out.println("< ---------- INFORMACIÓN DE MINEROS Y SOLDADOS ---------- >\n");
         for (Entidad objeto : arraylist) {
-            System.out.println("Elemento " + contador + ": " + objeto);
+            System.out.println("Elemento " + contador + ": " + objeto.toString());
             contador++;
         }
         System.out.println();
+    }
+    public static String getPassOperacion(Scanner sc, String nombreClase){
+
+        String passwdOperacion;
+        boolean exit = false;
+
+        do {
+            
+            System.out.println("Introduzca una contraseña de 16/24/32 letras para la operacion: ");
+            passwdOperacion = sc.nextLine();
+           
+        } while (passwdOperacion.length() != 16 && passwdOperacion.length() != 24 && passwdOperacion.length() != 32);
+        return passwdOperacion = EncryptOperation.encrypt(passwdOperacion,nombreClase);
     }
 
 }
