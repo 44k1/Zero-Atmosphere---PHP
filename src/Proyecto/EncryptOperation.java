@@ -35,23 +35,5 @@ public class EncryptOperation {
         return null;
     }
 
-    // Método para desencriptar un texto usando una clave
-    public static String decrypt(String encryptedText, String password) {
-        try {
-            // Generar una clave a partir de la contraseña
-            SecretKeySpec key = new SecretKeySpec(password.getBytes(), "AES");
-
-            // Inicializar el cifrador AES
-            Cipher cipher = Cipher.getInstance("AES");
-            cipher.init(Cipher.DECRYPT_MODE, key);
-
-            // Desencriptar el texto
-            byte[] decryptedText = cipher.doFinal(Base64.getDecoder().decode(encryptedText));
-            
-            return new String(decryptedText);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+  
 }

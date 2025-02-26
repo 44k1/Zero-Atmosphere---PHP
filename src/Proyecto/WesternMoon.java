@@ -1,3 +1,4 @@
+import java.io.Console;
 import java.util.*;
 
 public class WesternMoon {
@@ -9,12 +10,17 @@ public class WesternMoon {
         String passwdOperacion = null;
         passwdOperacion=getPassOperacion(sc,key);
         System.out.println(passwdOperacion);
+        
         // Creación de los objetos tripulantes predefinidos
         TripulantePredefinido Laura = new TripulantePredefinido("Laura", 20, "Femenino");
         TripulantePredefinido Carmen = new TripulantePredefinido("Carmen", 30, "Femenino");
         TripulantePredefinido Federico = new TripulantePredefinido("Federico", 19, "Masculino");
         TripulantePredefinido Lopez = new TripulantePredefinido("López", 33, "Masculino");
 
+
+        //PROBAR DECRYPTION
+        String anteriorPasswd = getPassOperacion(sc, key);
+        DecryptOperation.decrypt(DecryptOperation.decryptText(anteriorPasswd, key));
         // Solicitud de datos al usuario
         int numEsperadoAliens = 0;
         while (true) {
@@ -270,17 +276,33 @@ public class WesternMoon {
         System.out.println();
     }
     public static String getPassOperacion(Scanner sc, String nombreClase){
-
         String passwdOperacion;
         boolean exit = false;
 
         do {
-            
-            System.out.println("Introduzca una contraseña de 16/24/32 letras para la operacion: ");
-            passwdOperacion = sc.nextLine();
-           
-        } while (passwdOperacion.length() != 16 && passwdOperacion.length() != 24 && passwdOperacion.length() != 32);
-        return passwdOperacion = EncryptOperation.encrypt(passwdOperacion,nombreClase);
+            System.out.println("Introduzca una contraseña de 16/24/32 caracteres para la operación: ");
+            Console console = System.console();
+
+            if (console != null) {
+                // Si la consola está disponible, usar readPassword() para ocultar la entrada
+                char[] passwordArray = console.readPassword();
+                passwdOperacion = new String(passwordArray);
+                Arrays.fill(passwordArray, ' '); // Borra el array por seguridad
+            } else {
+                // Si no hay consola (ejemplo: en un IDE), usar Scanner
+                passwdOperacion = sc.nextLine();
+            }
+
+            // Validar la longitud de la clave
+            if (passwdOperacion.length() != 16 && passwdOperacion.length() != 24 && passwdOperacion.length() != 32) {
+                System.out.println("⚠️ Error: La contraseña debe tener 16, 24 o 32 caracteres. Inténtelo de nuevo.");
+            } else {
+                exit = true;
+            }
+
+        } while (!exit);
+
+        return EncryptOperation.encrypt(passwdOperacion, nombreClase);
     }
 
 }

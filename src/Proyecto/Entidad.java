@@ -19,7 +19,8 @@ public abstract class Entidad {
     private static int contadorMedioTransporte = 0;
     private static int contadorNave = 0;
     private static int contadorTurboJets = 0;
-
+    private static int contadorNomun = 0;
+    private static int contadorRaiser = 0;
     
 
     public String toString(){
@@ -81,6 +82,12 @@ public abstract class Entidad {
         } else if (this instanceof TurboJets) {
             contadorTurboJets++;
             return "TJT" + contadorTurboJets;
+        } else if (this instanceof Raiser){
+            contadorRaiser++;
+            return "RAI" + contadorRaiser;
+        }else if (this instanceof Nomun){
+            contadorNomun++;
+            return "NOM" + contadorNomun;
         }
         contadorWesternMoon++;
         return "WM" + contadorWesternMoon; // Devuelve algo default
