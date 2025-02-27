@@ -6,9 +6,28 @@ public class WesternMoon {
     public static void main(String[] args) {
         final String key = String.format("%016d", (long) (Math.random() * Math.pow(10, 16))) + String.format("%016d", (long) (Math.random() * Math.pow(10, 16)));
         Scanner sc = new Scanner(System.in);
+        //TEST USERSYSTEM
+        String user, password;
+        System.out.println("Registrando usuario..., introduce nombre del usuario");
+        user = sc.nextLine();
+        System.out.println("Introduce la contraseña:");
+        password = UserSystem.getPassSec(sc, key);
+        
+        
+        UserSystem.register(user, password, key);
+        
+        System.out.println("Intentando iniciar sesión..., introduce nombre de usuario");
+        user = sc.nextLine();
+        System.out.println("Introduce la contraseña:");
+        password = UserSystem.getPassSec(sc, key);
+        
+        boolean loginSuccess = UserSystem.login(user, password);
+        System.out.println("Inicio de sesión " + (loginSuccess ? "exitoso" : "fallido"));
+        //
+
         System.out.println(key);
         String passwdOperacion = null;
-        passwdOperacion=getPassOperacion(sc,key);
+        passwdOperacion=UserSystem.getPassSec(sc,key);
         System.out.println(passwdOperacion);
         
         // Creación de los objetos tripulantes predefinidos
@@ -17,10 +36,12 @@ public class WesternMoon {
         TripulantePredefinido Federico = new TripulantePredefinido("Federico", 19, "Masculino");
         TripulantePredefinido Lopez = new TripulantePredefinido("López", 33, "Masculino");
 
-
+        
         //PROBAR DECRYPTION
-        String anteriorPasswd = getPassOperacion(sc, key);
-        DecryptOperation.decrypt(DecryptOperation.decryptText(anteriorPasswd, key));
+        String anteriorPasswd = UserSystem.getPassSec(sc, key);
+        System.out.println("Introduce el nombre del fichero de la operacion: ");
+        String ficheroADescifrar = sc.nextLine();
+        DecryptOperation.decrypt(DecryptOperation.decryptText(anteriorPasswd, key),ficheroADescifrar);
         // Solicitud de datos al usuario
         int numEsperadoAliens = 0;
         while (true) {
@@ -275,34 +296,6 @@ public class WesternMoon {
         }
         System.out.println();
     }
-    public static String getPassOperacion(Scanner sc, String nombreClase){
-        String passwdOperacion;
-        boolean exit = false;
-
-        do {
-            System.out.println("Introduzca una contraseña de 16/24/32 caracteres para la operación: ");
-            Console console = System.console();
-
-            if (console != null) {
-                // Si la consola está disponible, usar readPassword() para ocultar la entrada
-                char[] passwordArray = console.readPassword();
-                passwdOperacion = new String(passwordArray);
-                Arrays.fill(passwordArray, ' '); // Borra el array por seguridad
-            } else {
-                // Si no hay consola (ejemplo: en un IDE), usar Scanner
-                passwdOperacion = sc.nextLine();
-            }
-
-            // Validar la longitud de la clave
-            if (passwdOperacion.length() != 16 && passwdOperacion.length() != 24 && passwdOperacion.length() != 32) {
-                System.out.println("⚠️ Error: La contraseña debe tener 16, 24 o 32 caracteres. Inténtelo de nuevo.");
-            } else {
-                exit = true;
-            }
-
-        } while (!exit);
-
-        return EncryptOperation.encrypt(passwdOperacion, nombreClase);
-    }
+    
 
 }

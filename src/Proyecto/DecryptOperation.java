@@ -1,26 +1,36 @@
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.Base64;
 
+
 public class DecryptOperation {
-    
+
     // Método para leer el archivo y desencriptarlo usando una clave
-    public static void decrypt(String password) {
+    public static void decrypt(String password, String ficheroADescifrar) {
         try {
             // Leer el contenido del archivo
-            String encryptedText = new String(Files.readAllBytes(Paths.get("costesOperacion.txt")));
+            String encryptedText = new String(Files.readAllBytes(Paths.get(ficheroADescifrar)));
 
             // Llamar al método de desencriptado
             String decryptedText = decryptText(encryptedText, password);
 
             // Mostrar el resultado desencriptado
-            System.out.println("---- OPERACION DESENCRIPTADA -----");
-            System.out.println(decryptedText);
+            
+            if (decryptedText!= null){ // != null, ya que si no se desencripta con exito retorna null, entonces lo evitamos..
+                System.out.println("<---- FICHERO DESENCRIPTADO ----->");
+                System.out.println(decryptedText);
+            }
+            
+        } catch (NoSuchFileException e) {
+            System.out.println("Error --> El archivo no existe. Verifica la ruta y el nombre.");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error al leer el archivo: " + e.getMessage());
         }
     }
 
@@ -38,11 +48,14 @@ public class DecryptOperation {
             byte[] decryptedText = cipher.doFinal(Base64.getDecoder().decode(encryptedText));
 
             return new String(decryptedText);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (IllegalBlockSizeException e){
+            System.out.println("ERROR, el fichero introducido no es multiplo de 16 o no esta codeado en BASE64 ");
+        } catch (BadPaddingException e){
+            System.out.println("ERROR --> La key introducida no coincide con la utilizada para el cifrado.");
+        }catch (Exception e) {
+            System.out.println("ERROR -> " + e);;
+        } 
         return null;
     }
-
 
 }
