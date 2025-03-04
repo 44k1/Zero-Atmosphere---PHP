@@ -3,9 +3,11 @@ public abstract class MedioTransporte extends Entidad{
     String tipoCombustible;
     int maxCombustible;
     int kilometraje;
+    
     ResponsableVehiculo rVehiculo;
     public MedioTransporte(){}
-    public MedioTransporte(int numPlazas,String tipoCombustible, int maxCombustible,int kilometraje,ResponsableVehiculo rVehiculo){
+    public MedioTransporte(String nombre,int numPlazas,String tipoCombustible, int maxCombustible,int kilometraje,ResponsableVehiculo rVehiculo){
+        super(nombre);
         this.numPlazas=numPlazas;
         this.tipoCombustible=tipoCombustible;
         this.maxCombustible=maxCombustible;
@@ -13,4 +15,14 @@ public abstract class MedioTransporte extends Entidad{
     }
     public void rellenarDeposito(int litros){}
     public void calcularAutonomia(){}
+
+    public void setResponsableVehiculo(ResponsableVehiculo rVehiculo) {
+        this.rVehiculo = rVehiculo;
+    }
+    
+    
+    
+    public ResponsableVehiculo getResponsableVehiculo() {
+        return rVehiculo;
+    }
 }
