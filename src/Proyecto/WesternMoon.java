@@ -12,6 +12,13 @@ public class WesternMoon {
         TripulantePredefinido Carmen = new TripulantePredefinido("Carmen", 30, "Femenino");
         TripulantePredefinido Federico = new TripulantePredefinido("Federico", 19, "Masculino");
         TripulantePredefinido Lopez = new TripulantePredefinido("López", 33, "Masculino");
+        // Creación de los 2 AeroCars que hay de reserva y de su responsable
+        ResponsableVehiculo responsable1 = new ResponsableVehiculo(null, null, null, null, null, null);
+        AeroCars aeroCar1 = new AeroCars("Aerocar de reserva 1", 4, "Gasolina", 200, 10000, responsable1, 4, 200, true);
+        AeroCars aeroCar2 = new AeroCars("Aerocar de reserva 2", 4, "Gasolina", 200, 1000, responsable1, 4, 200, true);
+        ArrayList<AeroCars> listaAeroCars = new ArrayList<>();
+        listaAeroCars.add(aeroCar1);
+        listaAeroCars.add(aeroCar2);
 
         // Solicitud de datos al usuario
         int numEsperadoAliens = 0;
@@ -187,7 +194,7 @@ public class WesternMoon {
         int numAerocarsUtilizar = 0;
         while (true) {
             try {
-                System.out.println("Introduzca el número de aerocars a utilizar: ");
+                System.out.println("Introduzca el número de aerocars a utilizar a demás de los 2 de reserva: ");
                 numAerocarsUtilizar = sc.nextInt();
                 while (numAerocarsUtilizar < 0) {
                     System.out.println(
@@ -202,6 +209,17 @@ public class WesternMoon {
             }
         }
 
+        for (int z = 0; z < numAerocarsUtilizar; z++) {
+            AeroCars aerocar3 = new AeroCars();
+            listaAeroCars.add(aerocar3);
+        }
+
+        // Se calcula el coste de cada aerocar en base a la distancia
+        System.out.println("Introduzca la distancia en años luz que van a recorrer los aeroscars");
+        double distancia = sc.nextFloat();
+        double raizCuadradaDistancia = Math.sqrt(distancia);
+        double costeCombustible = raizCuadradaDistancia * 12;
+
         // Muestra en pantalla la información del array de mineros y soldados
 
         mostrarAtributos(ListaSoldadosMineros);
@@ -211,7 +229,7 @@ public class WesternMoon {
         // Muestra en pantalla los costes de operación
         System.out.println(
                 costesOperacion(numEsperadoAliens, distanciaAñosLuz, numSoldados, numMineros, numAerocarsUtilizar,
-                        ListaSoldadosMineros));
+                        ListaSoldadosMineros, costeCombustible, listaAeroCars));
 
     }
 
@@ -220,8 +238,10 @@ public class WesternMoon {
     // GASTOS QUE HAN PROVOCADO
 
     public static String costesOperacion(int numEsperadoAliens, float distanciaAñosLuz, int numSoldados, int numMineros,
-            int numAerocarsUtilizar, ArrayList<Entidad> arraylist) {
+            int numAerocarsUtilizar, ArrayList<Entidad> arraylist, double costeCombustible,
+            ArrayList<AeroCars> listaAeroCars) {
 
+        // Cálculo de coste de mineros
         float yursSoldados = 0;
         float yursMineros = 0;
         for (Entidad objeto : arraylist) {
@@ -232,14 +252,20 @@ public class WesternMoon {
             }
         }
 
+        // Cálculo de coste de aerocars
+        double yursAerocars = listaAeroCars.size() * costeCombustible;
+
         return "< ---------- COSTES DE LA OPERACIÓN ---------- >\n\nDistancia de la nave DKW-RR.3: " + distanciaAñosLuz
                 + " años luz\nNúmero de alienígenas encontrados durante la operación: " + numEsperadoAliens + " + "
                 + (numEsperadoAliens * 4) + "yurs\nNúmero de soldados en la nave: "
                 + (numSoldados + (numEsperadoAliens * 2)) + " + "
                 + (yursSoldados * 3) + "yurs\nNúmero de mineros en la nave: " + (numMineros + (numEsperadoAliens * 2))
                 + " + "
-                + (yursMineros * 3) + "yurs\nNúmero de aerocars utilizados durante la operación: " + numAerocarsUtilizar
-                + "\n\nTOTAL: " + (((yursMineros * 3)) + (3 * yursSoldados) + (numEsperadoAliens * 4))
+                + (yursMineros * 3) + "yurs\nNúmero de aerocars utilizados durante la operación: "
+                + listaAeroCars.size()
+                + " + " + yursAerocars
+                + "yurs\n\nTOTAL: "
+                + (((yursMineros * 3)) + (3 * yursSoldados) + (numEsperadoAliens * 4) + yursAerocars)
                 + " YURS < -----";
     }
 
