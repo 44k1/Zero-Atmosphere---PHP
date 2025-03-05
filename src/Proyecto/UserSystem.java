@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class UserSystem {
     private static final String FILE_NAME = "UserDb.txt";
-    
+    static int contador = getLastID(FILE_NAME);
     public static boolean register(String username, String password, String key) {
         if (userExists(username)) {
             System.out.println("El usuario ya existe. Registro fallido.");
@@ -21,7 +21,7 @@ public class UserSystem {
             System.out.println("Error al cifrar la contraseña.");
             return false;
         }*/
-        String userData = username + "," + encryptedPassword + "," + key + "\n";
+        String userData = contador+1 +","+username + "," + encryptedPassword + "," + key + "\n";
         saveToFile(FILE_NAME, userData);
         return true;
     }
@@ -29,13 +29,12 @@ public class UserSystem {
     public static boolean login(String username, String password) {
         try {
             
-            
             List<String> lines = Files.readAllLines(Paths.get(FILE_NAME));
             for (String line : lines) {
                 String[] parts = line.split(",");
-                if (parts.length == 3 && parts[0].equals(username)) {
-                    String key = parts[2];
-                    String decryptedPassword = DecryptOperation.decryptText(parts[1], key);
+                if (parts.length == 4 && parts[1].equals(username)) {
+                    String key = parts[3];
+                    String decryptedPassword = DecryptOperation.decryptText(parts[2], key);
                     if (decryptedPassword != null && decryptedPassword.equals(password)) {
                         return true;
                     }
@@ -52,7 +51,7 @@ public class UserSystem {
             List<String> lines = Files.readAllLines(Paths.get(FILE_NAME));
             for (String line : lines) {
                 String[] parts = line.split(",");
-                if (parts.length > 0 && parts[0].equals(username)) {
+                if (parts.length > 0 && parts[1].equals(username)) {
                     return true;
                 }
             }
@@ -62,6 +61,31 @@ public class UserSystem {
         return false;
     }
 
+    
+    public static int getLastID(String filename) {
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(filename));
+            int lastID = 0;
+
+            for (String line : lines) {
+                String[] parts = line.split(",");
+                if (parts.length > 0) {
+                    try {
+                        int id = Integer.parseInt(parts[0].trim());
+                        if (id > lastID) {
+                            lastID = id;
+                        }
+                    } catch (NumberFormatException e) {
+                        // Ignorar líneas con formato incorrecto
+                    }
+                }
+            }
+            return lastID;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return -1; // Indica error al leer el archivo
+        }
+    }
     private static void saveToFile(String filename, String data) {
         try {
             Files.write(Paths.get(filename), data.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);

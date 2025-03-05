@@ -2,12 +2,22 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
 public class EncryptOperation {
-    public static void saveToFile(String filename, String data) {
+     public static void saveToFile(String filename, String data) {
         try {
-            Files.write(Paths.get(filename), data.getBytes());
+            Path path = Paths.get(filename);
+
+            // Asegurar que la ruta del directorio existe
+            if (!Files.exists(path.getParent())) {
+                Files.createDirectories(path.getParent());
+            }
+
+            // Escribir los datos en el archivo
+            Files.write(path, data.getBytes());
+
             System.out.println("Resultado guardado en " + filename);
         } catch (IOException e) {
             e.printStackTrace();

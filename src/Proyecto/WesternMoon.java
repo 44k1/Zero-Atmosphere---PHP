@@ -1,4 +1,3 @@
-import java.io.Console;
 import java.util.*;
 
 public class WesternMoon {
@@ -21,14 +20,11 @@ public class WesternMoon {
         System.out.println("Introduce la contraseña:");
         password = UserSystem.getPassSec(sc, key);
         
-        boolean loginSuccess = UserSystem.login(user, password);
+        boolean loginSuccess = UserSystem.login(user, DecryptOperation.decryptText(password, key)); //Se manda la contraseña desencriptada pedida previamente
         System.out.println("Inicio de sesión " + (loginSuccess ? "exitoso" : "fallido"));
         //
 
-        System.out.println(key);
-        String passwdOperacion = null;
-        passwdOperacion=UserSystem.getPassSec(sc,key);
-        System.out.println(passwdOperacion);
+        
         
         // Creación de los objetos tripulantes predefinidos
         TripulantePredefinido Laura = new TripulantePredefinido("Laura", 20, "Femenino");
@@ -239,7 +235,7 @@ public class WesternMoon {
 
         // Muestra en pantalla los costes de operación
                 costesOperacion(numEsperadoAliens, distanciaAñosLuz, numSoldados, numMineros, numAerocarsUtilizar,
-                        ListaSoldadosMineros, sc,passwdOperacion,key);
+                        ListaSoldadosMineros, sc,password,key,user);
 
     }
 
@@ -248,7 +244,7 @@ public class WesternMoon {
     // GASTOS QUE HAN PROVOCADO
 
     public static void costesOperacion(int numEsperadoAliens, float distanciaAñosLuz, int numSoldados, int numMineros,
-            int numAerocarsUtilizar, ArrayList<Entidad> arraylist, Scanner sc, String passwdOperacion, String nombreClase) {
+            int numAerocarsUtilizar, ArrayList<Entidad> arraylist, Scanner sc, String password, String key,String user) {
         System.out.println("¿Quieres guardar los costes de operación y encriptarlos? (true/false)");
         boolean guardarOperacion = sc.nextBoolean();
         float yursSoldados = 0;
@@ -275,9 +271,9 @@ public class WesternMoon {
             
 
                     // Encriptar el resultado y guardarlo en un archivo
-                    String encryptedResult = EncryptOperation.encrypt(resultado, DecryptOperation.decryptText(passwdOperacion,nombreClase)); // Cambia la clave según
+                    String encryptedResult = EncryptOperation.encrypt(resultado, DecryptOperation.decryptText(password, key)); // Cambia la clave según
                                                                                                       // necesidad
-                    EncryptOperation.saveToFile("costesOperacion.txt", encryptedResult);
+                    EncryptOperation.saveToFile("UserFiles\\"+user+"\\costesOperacion.txt", encryptedResult);
                 }
         
 
