@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UserSystem {
-    private static final String FILE_NAME = "UserDb.txt";
+    private static final String FILE_NAME = ".\\src\\Proyecto\\UserDb.txt";
     static int contador = getLastID(FILE_NAME);
     public static boolean register(String username, String password, String key) {
         if (userExists(username)) {
