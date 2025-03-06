@@ -1,4 +1,6 @@
 import java.util.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class WesternMoon {
 
@@ -6,6 +8,10 @@ public class WesternMoon {
 
         // Creación del escaner
         Scanner sc = new Scanner(System.in);
+
+        // Se enlaza a los ficheros
+        // File apellidos = new File("./Utils/apellidos.txt");
+        // File rangos = new File("./Utils/rangos.txt");
 
         // Creación de los objetos tripulantes predefinidos
         TripulantePredefinido Laura = new TripulantePredefinido("Laura", 20, "Femenino");
@@ -43,6 +49,12 @@ public class WesternMoon {
 
         // ArrayList con el doble de soldados y mineros que aliens
         ArrayList<Entidad> ListaSoldadosMineros = new ArrayList<>();
+        System.out.println("Se van a crear " + (numEsperadoAliens * 2)
+                + " soldados y mineros, escriba AUTO si quiere que se le asignen valores automáticos");
+        String opcion = sc.nextLine();
+        if (opcion.equalsIgnoreCase("AUTO")) {
+
+        }
         for (int a = 0; a < numEsperadoAliens; a++) {
             // Solicitud de atributos de los 2 soldados
             System.out.println("Nombre del primer soldado asignado al alien " + (a + 1) + ": ");
