@@ -1,52 +1,71 @@
-import java.util.*;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.*;
 
 public class WesternMoon {
 
     public static void main(String[] args) {
-
-        // Creación del escaner
+        final String key = String.format("%016d", (long) (Math.random() * Math.pow(10, 16)))
+                + String.format("%016d", (long) (Math.random() * Math.pow(10, 16)));
         Scanner sc = new Scanner(System.in);
-
+        String user = null;
+        String password = null;
+        boolean loginSuccess = false;
         try {
             mostrarAnimacion();
         } catch (Exception e) {
         }
 
-        // Saltos de espacio después de la animación
-        System.out.println();
-        System.out.println();
-
-        // ArrayList con el listado de operaciones
-        ArrayList<String> listaOperaciones = new ArrayList<>();
-        int contadorOperaciones = 0;
-
-        String opcionMenu = "";
+        String opcionMenu = null;
         do {
 
             // Menú que ve el usuario
-            System.out.println(" ---------------------------------------");
-            System.out.println("| 1. INICIAR SESIÓN                     |");
-            System.out.println("| 2. COMENZAR OPERACIÓN                 |");
-            System.out.println("| 3. GESTIÓN DE MAQUINARIA              |");
-            System.out.println("| 4. MOSTRAR LISTADO DE OPERACIONES     |");
-            System.out.println("| 5. SALIR                              |");
-            System.out.println(" ---------------------------------------");
+            System.out.println("1. INICIAR SESIÓN");
+            System.out.println("2. COMENZAR OPERACIÓN");
+            System.out.println("3. GESTIÓN DE MAQUINARIA");
+            System.out.println("4. MOSTRAR LISTADO DE OPERACIONES");
+            System.out.println("5. SALIR");
             opcionMenu = sc.nextLine();
 
             switch (opcionMenu) {
                 case "1":
-                    // AQUÍ IRÁ LO RELACIONADO CON EL INICIO DE SESIÓN
-                    System.out.println("Marunigger");
+                    // TEST USERSYSTEM
+
+                    try {
+                        System.out.println("¿Quiere registrar un nuevo usuario? (true/false)");
+                        boolean opt = sc.nextBoolean();
+                        sc.nextLine();
+                        if (opt == true) {
+                            System.out.println("Registrando usuario, introduce nombre del usuario");
+                            user = sc.nextLine();
+                            System.out.println("Introduce la contraseña:");
+                            password = UserSystem.getPassSec(sc, key);
+                            UserSystem.register(user, password, key);
+                        }
+                    } catch (Exception e) {
+
+                        System.out.println("Error, debe introducir true o false");
+                    }
+
+                    System.out.println("Intentando iniciar sesión..., introduce nombre de usuario");
+                    user = sc.nextLine();
+                    System.out.println("Inicio de sesion para " + user);
+                    password = UserSystem.getPassSec(sc, key);
+
+                    loginSuccess = UserSystem.login(user, DecryptOperation.decryptText(password, key)); // Se
+                                                                                                        // manda
+                                                                                                        // la
+                                                                                                        // contraseña
+                                                                                                        // desencriptada
+                                                                                                        // pedida
+                                                                                                        // previamente
+                    System.out.println("Inicio de sesión " + (loginSuccess ? "exitoso" : "fallido"));
+                    //
+
+                    break;
                 case "2":
-                    // Contador de operaciones
-                    contadorOperaciones++;
-                    // Creación de los objetos tripulantes predefinidos
-                    TripulantePredefinido Laura = new TripulantePredefinido("Laura", 20, "Femenino");
-                    TripulantePredefinido Carmen = new TripulantePredefinido("Carmen", 30, "Femenino");
-                    TripulantePredefinido Federico = new TripulantePredefinido("Federico", 19, "Masculino");
-                    TripulantePredefinido Lopez = new TripulantePredefinido("López", 33, "Masculino");
+                    if (loginSuccess!=true)break;
                     // Creación de los 2 AeroCars que hay de reserva y de su responsable
                     ResponsableVehiculo responsable1 = new ResponsableVehiculo(null, null, null, null, null, null);
                     AeroCars aeroCar1 = new AeroCars("Aerocar de reserva 1", 4, "Gasolina", 200, 10000, responsable1, 4,
@@ -56,6 +75,12 @@ public class WesternMoon {
                     ArrayList<AeroCars> listaAeroCars = new ArrayList<>();
                     listaAeroCars.add(aeroCar1);
                     listaAeroCars.add(aeroCar2);
+
+                    // Creación de los objetos tripulantes predefinidos
+                    TripulantePredefinido Laura = new TripulantePredefinido("Laura", 20, "Femenino");
+                    TripulantePredefinido Carmen = new TripulantePredefinido("Carmen", 30, "Femenino");
+                    TripulantePredefinido Federico = new TripulantePredefinido("Federico", 19, "Masculino");
+                    TripulantePredefinido Lopez = new TripulantePredefinido("López", 33, "Masculino");
 
                     // Solicitud de datos al usuario
                     int numEsperadoAliens = 0;
@@ -81,48 +106,12 @@ public class WesternMoon {
 
                     // ArrayList con el doble de soldados y mineros que aliens
                     ArrayList<Entidad> ListaSoldadosMineros = new ArrayList<>();
-                    System.out.println("Se van a crear " + (numEsperadoAliens * 2)
-                            + " soldados y mineros, escriba AUTO si quiere que se le asignen valores automáticos");
-                    String opcion = sc.nextLine();
-                    if (opcion.equalsIgnoreCase("AUTO")) {
 
-                    }
-                    for (int a = 0; a < numEsperadoAliens; a++) {
-                        // Solicitud de atributos de los 2 soldados
-                        System.out.println("Nombre del primer soldado asignado al alien " + (a + 1) + ": ");
-                        String nombreSoldado1 = sc.nextLine();
-                        System.out.println("Rango del soldado asignado al alien " + (a + 1) + ": ");
-                        String rangoSoldado1 = sc.nextLine();
-                        System.out.println("Nombre del segundo soldado asignado al alien " + (a + 1) + ": ");
-                        String nombreSoldado2 = sc.nextLine();
-                        System.out.println("Rango del segundo asignado al alien " + (a + 1) + ": ");
-                        String rangoSoldado2 = sc.nextLine();
-                        // Solicitud de atributos de los 2 mineros
-                        System.out.println("Nombre del primer minero asignado al alien " + (a + 1) + ": ");
-                        String nombreMinero1 = sc.nextLine();
-                        System.out.println("Edad del primer minero asignado al alien " + (a + 1) + ": ");
-                        int edadMinero1 = sc.nextInt();
-                        sc.nextLine(); // Limpiar buffer
-                        System.out.println("Género del primer minero asignado al alien " + (a + 1) + ": ");
-                        String generoMinero1 = sc.nextLine();
-                        System.out.println("Nombre del segundo minero asignado al alien " + (a + 1) + ": ");
-                        String nombreMinero2 = sc.nextLine();
-                        System.out.println("Edad del segundo minero asignado al alien " + (a + 1) + ": ");
-                        int edadMinero2 = sc.nextInt();
-                        sc.nextLine(); // Limpiar buffer
-                        System.out.println("Género del segundo minero asignado al alien " + (a + 1) + ": ");
-                        String generoMinero2 = sc.nextLine();
-                        // Creación de objetos a partir de los datos obtenidos
-                        Soldado soldado1 = new Soldado(nombreSoldado1, rangoSoldado1);
-                        Soldado soldado2 = new Soldado(nombreSoldado2, rangoSoldado2);
-                        Minero minero1 = new Minero(nombreMinero1, edadMinero1, generoMinero1);
-                        Minero minero2 = new Minero(nombreMinero2, edadMinero2, generoMinero2);
-                        // Se añaden dentro del ArrayList los objetos creados
-                        ListaSoldadosMineros.add(soldado1);
-                        ListaSoldadosMineros.add(soldado2);
-                        ListaSoldadosMineros.add(minero1);
-                        ListaSoldadosMineros.add(minero2);
-                    }
+                    System.out.println("Se van a crear " + (numEsperadoAliens * 2)
+                            + " soldados y mineros, escriba AUTO si quiere que se le asignen valores automaticos.");
+                    String opcion = sc.nextLine();
+                    // Llamamos a la funcion que crea los soldados y mineros
+                    IABob.crearListaSoldadosMineros(opcion, ListaSoldadosMineros, numEsperadoAliens);
 
                     // Solicitud de datos al usuario
                     float distanciaAñosLuz;
@@ -254,7 +243,6 @@ public class WesternMoon {
                                     "ERROR --> Se debe de introducir un número entero, por favor, inténtelo de nuevo");
                         }
                     }
-
                     for (int z = 0; z < numAerocarsUtilizar; z++) {
                         AeroCars aerocar3 = new AeroCars();
                         listaAeroCars.add(aerocar3);
@@ -265,43 +253,44 @@ public class WesternMoon {
                     double distancia = sc.nextFloat();
                     double raizCuadradaDistancia = Math.sqrt(distancia);
                     double costeCombustible = raizCuadradaDistancia * 12;
-
                     // Muestra en pantalla la información del array de mineros y soldados
-
                     mostrarAtributos(ListaSoldadosMineros);
 
                     System.out.println();
 
                     // Muestra en pantalla los costes de operación
-                    System.out.println(
-                            costesOperacion(numEsperadoAliens, distanciaAñosLuz, numSoldados, numMineros,
-                                    numAerocarsUtilizar,
-                                    ListaSoldadosMineros, costeCombustible, listaAeroCars, contadorOperaciones));
-                    // Se añaden los costes de la operación al ArrayList para listarlos
-                    // posteriormente si es necesario
-                    listaOperaciones.add(costesOperacion(numEsperadoAliens, distanciaAñosLuz, numSoldados, numMineros,
-                            numAerocarsUtilizar,
-                            ListaSoldadosMineros, costeCombustible, listaAeroCars, contadorOperaciones));
+                    costesOperacion(numEsperadoAliens, distanciaAñosLuz, numSoldados, numMineros, numAerocarsUtilizar,
+                            ListaSoldadosMineros, costeCombustible, listaAeroCars, sc, password, key, user);
+
                     break;
                 case "3":
-                    // AQUÍ IRÁ LAS OPCIONES DE LA MAQUINARIA
-                    System.out.println("Aiman marron");
+                        System.out.println("1. Mostrar Maquinaria.");
+                        System.out.println("2. Modificar Maquinaria.");
+                        String opcionMenuCase3 = sc.nextLine();
+                        switch (opcionMenuCase3) {
+                            case "1":
+                                IABob.mostrarMaquinaria();
+                                break;
+                            case "2":
+                                IABob.modificarObjeto();
+                            default:
+                            System.out.println("Introduce una opcion correcta.");
+                                break;
+                        }
+                        
                     break;
                 case "4":
-                    for (String operacion : listaOperaciones) {
-                        System.out.println(operacion);
-                        System.out.println();
-                    }
+                if (loginSuccess!=true)break;
+                    DecryptOperation.decrypt(DecryptOperation.decryptText(password, key),
+                            "UserFiles\\" + user + "\\" + "costesOperacion.txt");
                     break;
                 case "5":
-                    System.out.println("El programa finalizó con exito");
+
                     break;
+
                 default:
-                    System.out.println(
-                            "ERROR --> No se pudo encontrar la opción indicada, por favor, inténtelo de nuevo");
                     break;
             }
-
         } while (!opcionMenu.equalsIgnoreCase("5"));
 
     }
@@ -310,13 +299,15 @@ public class WesternMoon {
     // MUESTRA EL NÚMERO DE ELEMENTOS QUE HAN PARTICIPADO EN LA OPERACIÓN Y LOS
     // GASTOS QUE HAN PROVOCADO
 
-    public static String costesOperacion(int numEsperadoAliens, float distanciaAñosLuz, int numSoldados, int numMineros,
+    public static void costesOperacion(int numEsperadoAliens, float distanciaAñosLuz, int numSoldados, int numMineros,
             int numAerocarsUtilizar, ArrayList<Entidad> arraylist, double costeCombustible,
-            ArrayList<AeroCars> listaAeroCars, int numOp) {
-
-        // Cálculo de coste de mineros
+            ArrayList<AeroCars> listaAeroCars, Scanner sc, String password, String key, String user) {
+        System.out.println("¿Quieres guardar los costes de operación y encriptarlos? (true/false)");
+        boolean guardarOperacion = sc.nextBoolean();
         float yursSoldados = 0;
         float yursMineros = 0;
+        // Cálculo de coste de aerocars
+        double yursAerocars = listaAeroCars.size() * costeCombustible;
         for (Entidad objeto : arraylist) {
             if (objeto instanceof Soldado) {
                 yursSoldados = yursSoldados + 22;
@@ -324,24 +315,34 @@ public class WesternMoon {
                 yursMineros = yursMineros + 20;
             }
         }
-
-        // Cálculo de coste de aerocars
-        double yursAerocars = listaAeroCars.size() * costeCombustible;
-        float yursAerocarsfloat = (float) yursAerocars;
-
-        return "< ---------- COSTES DE LA OPERACIÓN N" + numOp + " ---------- >\n\nDistancia de la nave DKW-RR.3: "
+        String resultado = "< ---------- COSTES DE LA OPERACIÓN ---------- >\n\nDistancia de la nave DKW-RR.3: "
                 + distanciaAñosLuz
                 + " años luz\nNúmero de alienígenas encontrados durante la operación: " + numEsperadoAliens + " + "
-                + (numEsperadoAliens * 4) + ".0yurs\nNúmero de soldados en la nave: "
+                + (numEsperadoAliens * 4) + "yurs\nNúmero de soldados en la nave: "
                 + (numSoldados + (numEsperadoAliens * 2)) + " + "
                 + (yursSoldados * 3) + "yurs\nNúmero de mineros en la nave: " + (numMineros + (numEsperadoAliens * 2))
                 + " + "
+                + (yursMineros * 3) + "yurs\nNúmero de aerocars utilizados durante la operación: " + numAerocarsUtilizar
+                + "\n\nTOTAL: " + (((yursMineros * 3)) + (3 * yursSoldados) + (numEsperadoAliens * 4))
                 + (yursMineros * 3) + "yurs\nNúmero de aerocars utilizados durante la operación: "
                 + listaAeroCars.size()
-                + " + " + yursAerocarsfloat
+                + " + " + yursAerocars
                 + "yurs\n\nTOTAL: "
                 + (((yursMineros * 3)) + (3 * yursSoldados) + (numEsperadoAliens * 4) + yursAerocars)
-                + " YURS < -----\n\n";
+                + " YURS < -----";
+        System.out.println(resultado);
+
+        if (guardarOperacion) {
+
+            // Encriptar el resultado y guardarlo en un archivo
+            String encryptedResult = EncryptOperation.encrypt(resultado, DecryptOperation.decryptText(password, key)); // Cambia
+                                                                                                                       // la
+                                                                                                                       // clave
+                                                                                                                       // según
+            // necesidad
+            EncryptOperation.saveToFile("UserFiles\\" + user + "\\costesOperacion.txt", encryptedResult);
+        }
+
     }
 
     // FUNCIÓN ENCARGADA DE RECIBIR UN ARRAYLIST DE TIPO ENTIDAD QUE SE ENCARGA DE
@@ -358,7 +359,7 @@ public class WesternMoon {
         System.out.println();
     }
 
-    // FUNCIÓN QUE MUESTRA ANIMACIONES Y COLORES
+    // Función que muestra la animación con el texto, retraso y color
     public static void mostrarAnimacion() throws InterruptedException {
         // Definir el ASCII art para "WesternMoon" (puedes personalizar este arte)
         String[] asciiArt = {
@@ -393,6 +394,7 @@ public class WesternMoon {
             Thread.sleep(100);
         }
 
+        // Línea nueva después de la animación
+        System.out.println();
     }
-
 }
