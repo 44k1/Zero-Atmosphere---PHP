@@ -9,6 +9,15 @@ public class WesternMoon {
         // Creación del escaner
         Scanner sc = new Scanner(System.in);
 
+        try {
+            mostrarAnimacion();
+        } catch (Exception e) {
+        }
+
+        // Saltos de espacio después de la animación
+        System.out.println();
+        System.out.println();
+
         // ArrayList con el listado de operaciones
         ArrayList<String> listaOperaciones = new ArrayList<>();
         int contadorOperaciones = 0;
@@ -17,11 +26,13 @@ public class WesternMoon {
         do {
 
             // Menú que ve el usuario
-            System.out.println("1. INICIAR SESIÓN");
-            System.out.println("2. COMENZAR OPERACIÓN");
-            System.out.println("3. GESTIÓN DE MAQUINARIA");
-            System.out.println("4. MOSTRAR LISTADO DE OPERACIONES");
-            System.out.println("5. SALIR");
+            System.out.println(" ---------------------------------------");
+            System.out.println("| 1. INICIAR SESIÓN                     |");
+            System.out.println("| 2. COMENZAR OPERACIÓN                 |");
+            System.out.println("| 3. GESTIÓN DE MAQUINARIA              |");
+            System.out.println("| 4. MOSTRAR LISTADO DE OPERACIONES     |");
+            System.out.println("| 5. SALIR                              |");
+            System.out.println(" ---------------------------------------");
             opcionMenu = sc.nextLine();
 
             switch (opcionMenu) {
@@ -345,6 +356,43 @@ public class WesternMoon {
             contador++;
         }
         System.out.println();
+    }
+
+    // FUNCIÓN QUE MUESTRA ANIMACIONES Y COLORES
+    public static void mostrarAnimacion() throws InterruptedException {
+        // Definir el ASCII art para "WesternMoon" (puedes personalizar este arte)
+        String[] asciiArt = {
+                " ___       __   _____ ______      \r\n", //
+                "|\\  \\     |\\  \\|\\   _ \\  _   \\    \r\n", //
+                "\\ \\  \\    \\ \\  \\ \\  \\\\\\__\\ \\  \\   \r\n", //
+                " \\ \\  \\  __\\ \\  \\ \\  \\\\|__| \\  \\  \r\n", //
+                "  \\ \\  \\|\\__\\_\\  \\ \\  \\    \\ \\  \\ \r\n", //
+                "   \\ \\____________\\ \\__\\    \\ \\__\\\r\n", //
+                "    \\|____________|\\|__|     \\|__|\n",
+                "       WesternMoon by PHPTeam!"
+        };
+
+        // Colores temáticos lunares
+        String[] colores = {
+                "\u001B[37m", // Blanco (Luna llena)
+                "\u001B[34m", // Azul (Cielo nocturno)
+                "\u001B[36m", // Cian (Reflejo lunar)
+                "\u001B[90m", // Gris oscuro (Sombra lunar)
+                "\u001B[35m" // Magenta (Aurora lunar)
+        };
+
+        // Animación con cambio de color para cada línea de ASCII art
+        for (int i = 0; i < asciiArt.length; i++) {
+            // Elegir un color del array basado en la posición
+            String color = colores[i % colores.length];
+
+            // Imprimir la línea con el color seleccionado
+            System.out.print(color + asciiArt[i] + "\u001B[0m");
+
+            // Esperar un poco antes de imprimir la siguiente línea
+            Thread.sleep(100);
+        }
+
     }
 
 }
