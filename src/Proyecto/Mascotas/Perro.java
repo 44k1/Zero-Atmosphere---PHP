@@ -1,6 +1,4 @@
 public class Perro extends Mascota{
-    static int contador=0;
-    
     public Perro(String nombre) {
         super(nombre);
     }

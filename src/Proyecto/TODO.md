@@ -3,4 +3,3 @@ Falta implementar PropietarioMascota correctamente, Falta implementar Responsabl
 # MediosTransporte
 Falta implementar funciones y meter metodos de validacion
 # Todo el proyecto
-Metodos de validacion y arreglar las relaciones

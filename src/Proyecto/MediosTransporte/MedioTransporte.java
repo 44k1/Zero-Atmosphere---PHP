@@ -1,5 +1,4 @@
 public abstract class MedioTransporte extends Entidad{
-    static int contador=0;
     int numPlazas;
     String tipoCombustible;
     int maxCombustible;

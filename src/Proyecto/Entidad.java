@@ -19,7 +19,8 @@ public abstract class Entidad {
     private static int contadorMedioTransporte = 0;
     private static int contadorNave = 0;
     private static int contadorTurboJets = 0;
-
+    private static int contadorNomun = 0;
+    private static int contadorRaiser = 0;
     
 
     public String toString(){
@@ -29,7 +30,10 @@ public abstract class Entidad {
         this.nombre=nombre;
         this.id=generarId();
     }
-    public Entidad(){}
+    public Entidad(){
+        this.nombre=null;
+        this.id=generarId();
+    }
 
     private String generarId() {
         if (this instanceof Soldado) {
@@ -78,6 +82,12 @@ public abstract class Entidad {
         } else if (this instanceof TurboJets) {
             contadorTurboJets++;
             return "TJT" + contadorTurboJets;
+        } else if (this instanceof Raiser){
+            contadorRaiser++;
+            return "RAI" + contadorRaiser;
+        }else if (this instanceof Nomun){
+            contadorNomun++;
+            return "NOM" + contadorNomun;
         }
         contadorWesternMoon++;
         return "WM" + contadorWesternMoon; // Devuelve algo default
@@ -87,7 +97,7 @@ public abstract class Entidad {
         return nombre;
     }
     public String getId() {
-        return nombre;
+        return id;
     }
     public String getClassName(){
         return this.getClass().getSimpleName();
@@ -98,6 +108,3 @@ public abstract class Entidad {
     }*/
     
 }
-
-
-
