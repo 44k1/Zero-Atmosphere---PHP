@@ -1,8 +1,7 @@
 package Maquinaria;
 
-import java.io.Serializable;
 
-public class Cibercompresor extends Maquinaria implements Serializable{
+public class Cibercompresor extends Maquinaria{
     int consumo;
     String sujeccion;
     double proteccion;

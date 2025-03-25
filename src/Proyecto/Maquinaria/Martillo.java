@@ -1,8 +1,6 @@
 package Maquinaria;
 
-import java.io.Serializable;
-
-public class Martillo extends Maquinaria implements Serializable{
+public class Martillo extends Maquinaria{
     int consumo;
     String sujeccion;
     double proteccion;
@@ -11,5 +9,10 @@ public class Martillo extends Maquinaria implements Serializable{
         this.consumo=consumo;
         this.sujeccion=sujeccion;
         this.proteccion=proteccion;
-}
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " Consumo: " + consumo + " Sujeccion: " + sujeccion +" Proteccion: " + proteccion;
+    }
 }

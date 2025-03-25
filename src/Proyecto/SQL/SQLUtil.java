@@ -1,11 +1,22 @@
 package SQL;
-
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Scanner;
+
+import Maquinaria.Maquinaria;
+
 
 public class SQLUtil {
     static Scanner sc = new Scanner(System.in);
@@ -16,114 +27,137 @@ public class SQLUtil {
     };
     static int filas = 3;
     static int columnas = 10;
-    private static String[][] maquinaria = new String[filas][columnas];
+    private static Maquinaria[][] maquinaria = new Maquinaria[filas][columnas];
 
     public static void cargarMatriz() {
         for (int i = 0; i < filas; i++) {
-            try (DataInputStream dis = new DataInputStream(new FileInputStream(fichas[i]))) {
+            File f = new File(fichas[i]);
+
+            if (!f.exists()) {
+                System.err.println("Error: No se encontró el archivo " + fichas[i]);
+                continue; // Salta a la siguiente iteración si el archivo no existe
+            }
+
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f))) {
                 for (int j = 0; j < columnas; j++) {
-                    String nombre = dis.readUTF(); // Leer el nombre del objeto
-                    int valor1 = dis.readInt(); // Leer el primer valor entero
-                    String tipo = dis.readUTF(); // Leer el tipo (ruedas/oruga)
-                    double valor2 = dis.readDouble(); // Leer el segundo valor numérico (double)
-                    maquinaria[i][j] = nombre + " " + valor1 + " " + tipo + " " + valor2;
+                    maquinaria[i][j] = (Maquinaria) ois.readObject();
+
                 }
-            } catch (IOException e) {
-                System.out.println("Error al cargar " + fichas[i]);
+            } catch (IOException | ClassNotFoundException e) {
+                System.err.println("Error al leer el archivo " + fichas[i] + ": " + e.getMessage());
             }
         }
-
     }
+
+    
 
     public static void main(String[] args) {
         cargarMatriz();
         mostrarMaquinaria();
         actualizacionSQL();
-        mostrarMaquinaria();
-
     }
 
     public static void mostrarMaquinaria() {
-
         System.out.println("\nDatos en maquinaria:");
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
                 if (maquinaria[i][j] == null) {
                     continue;
                 }
-                String[] datos = maquinaria[i][j].split(" ");
-                if (datos.length < 4) {
-                    System.out.println("[Datos incompletos]");
-                    continue;
-                }
+                
+                Maquinaria datos = maquinaria[i][j]; // Extraemos el objeto Maquinaria
+                
+                
+    
                 switch (i) {
                     case 0: // mov_tierra.dat
-                        System.out.printf("Ciberexcavadora: %s, Consumo: %s L, Tracción: %s, Protección: %s\n",
-                                datos[0], datos[1], datos[2], datos[3]);
+                    System.out.printf(datos.toString());
+                    System.out.println("");
                         break;
-                    case 1: // manual_pala.dat
-                        System.out.printf("Pala: %s, Longitud del Mango: %s m, Metal: %s, Protección: %s\n",
-                                datos[0], datos[1], datos[2], datos[3]);
+                    case 1: // martillo.dat
+                    System.out.printf(datos.toString());
+                    System.out.println("");
                         break;
-                    case 2: // martillo.dat
-                        System.out.printf("Martillo: %s, Consumo: %s KW, Sujeción: %s, Protección: %s\n",
-                                datos[0], datos[1], datos[2], datos[3]);
-                        break;
-                    case 3: // cibercompresor.dat
-                        System.out.printf("Cibercompresor: %s, Consumo: %s L, Tracción: %s, Protección: %s\n",
-                                datos[0], datos[1], datos[2], datos[3]);
+                    case 2: // cibercompresor.dat
+                        System.out.printf(datos.toString());
+                        System.out.println("");     
                         break;
                 }
             }
         }
     }
+    
 
     public static void actualizacionSQL() {
-
-        System.out.println("1.Actualizacion nocturna\n2.Modificar objeto");
-
-        String opcion = sc.nextLine();
-
-        switch (opcion) {
-            case "1":
-
-                break;
-            case "2":
-                try {
-                    System.out.println("Introduce un numero de ficha: ");
-                    int numFicha = sc.nextInt();
-                    sc.nextLine();
-                    System.out.println("Introduce el nombre de un elemento (pala1,cibercompresor1..): ");
-                    String nombreElemento = sc.nextLine();
-                    System.out.println("Introduce el consumo a modificar: ");
-                    int consumoElemento = sc.nextInt();
+        // Establecer la conexión con la base de datos
+        String url = "jdbc:mysql://localhost:3306/atmosferazero";  // Base de datos 'atmosferazero'
+        String user = "root";
+        String password = "mysql";
 
 
-                    for (int i = 0; i < filas; i++) {
-                        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(fichas[i]))) {
-                        for (int j = 0; j < columnas; j++) {
-                        String[] partes = maquinaria[i][j].split(" ");
-                        if(partes[0].equalsIgnoreCase(nombreElemento)){
-                        dos.writeInt(consumoElemento);  // Escribir el valor1
-
+        try (Connection conn = DriverManager.getConnection(url, user, password)) {
+            // Recorrer los archivos en el array 'fichas'
+            for (int i = 0; i < fichas.length; i++) {
+                // Leer el archivo correspondiente
+                File archivo = new File(fichas[i]);
+                String tabla = determinarTabla(fichas[i]); // Obtener la tabla correspondiente
+                try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
+                    int j = 0;
+                    while (true) {
+                        try {
+                            // Leer el objeto de maquinaria desde el archivo
+                            Maquinaria obj = (Maquinaria) ois.readObject();
+                            // Asignar el objeto en la matriz
+                            maquinaria[i][j] = obj;
+                            // Insertar el objeto serializado en la base de datos
+                            insertarObjetoSerializado(obj, conn, tabla);
+                            j++;
+                        } catch (EOFException e) {
+                            break;  // Fin del archivo
+                        }
                     }
-                cargarMatriz();
-                    
-            }
-        } catch (IOException e) {
-            System.out.println("Error al guardar " + fichas[i]);
-        }
-                    
-     }} catch (Exception e) {
-                    System.out.println("ERROR --> " + e.getMessage());
-
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
-
-                break;
-            default:
-                System.out.println("Introduzca una opcion valida.");
-                break;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-}
+    }
+
+    // Método para determinar la tabla correspondiente según el archivo
+    private static String determinarTabla(String rutaArchivo) {
+        if (rutaArchivo.contains("mov_tierra")) {
+            return "ficha1";
+        } else if (rutaArchivo.contains("martillo")) {
+            return "ficha2";
+        } else if (rutaArchivo.contains("cibercompresor")) {
+            return "ficha4";
+        }
+        return null; // Default en caso de no encontrar coincidencia
+    }
+
+    // Método para insertar el objeto serializado en la base de datos
+    private static void insertarObjetoSerializado(Maquinaria obj, Connection conn, String tabla) {
+        // SQL para insertar el objeto serializado en la base de datos
+        String sql = "INSERT INTO " + tabla + " (objeto_serializado) VALUES (?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            // Serializar el objeto
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(obj);
+            byte[] objBytes = baos.toByteArray();
+            
+            // Insertar el objeto serializado como BLOB
+            stmt.setBytes(1, objBytes);
+            
+            stmt.executeUpdate();
+            System.out.println("Insertado en tabla: " + tabla);
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

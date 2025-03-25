@@ -1,8 +1,7 @@
 package Maquinaria;
 
-import java.io.Serializable;
 
-public class Ciberexcavadora extends Maquinaria implements Serializable{
+public class Ciberexcavadora extends Maquinaria{
     int consumo;
     String traccion;
     double proteccion;
@@ -12,5 +11,10 @@ public class Ciberexcavadora extends Maquinaria implements Serializable{
         this.consumo=consumo;
         this.traccion=traccion;
         this.proteccion=proteccion;
-}
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " Consumo: " + consumo + " Traccion: " + traccion +" Proteccion: " + proteccion;
+    }
 }

@@ -14,6 +14,8 @@ public class GeneradorDAT {
             "src\\Proyecto\\Utils\\mov_tierra.dat", "src\\Proyecto\\Utils\\manual_pala.dat", "src\\Proyecto\\Utils\\martillo.dat", "src\\Proyecto\\Utils\\cibercompresor.dat"
     };
 
+    private static final long serialVersionUID = 1L;
+
 
     public static void main(String[] args) {
         try {

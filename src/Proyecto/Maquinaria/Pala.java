@@ -1,8 +1,7 @@
 package Maquinaria;
 
-import java.io.Serializable;
 
-public class Pala extends Maquinaria implements Serializable{
+public class Pala extends Maquinaria{
     int lonmango;
     String metal;
     String proteccion;
@@ -11,5 +10,9 @@ public class Pala extends Maquinaria implements Serializable{
         this.lonmango=lonmango;
         this.metal=metal;
         this.proteccion=proteccion;
+    }
+    @Override
+    public String toString() {
+        return super.toString() + " Lonmango: " + lonmango + " Metal: " + metal +" Proteccion: " + proteccion;
     }
 }
