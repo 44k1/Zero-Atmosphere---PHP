@@ -1,13 +1,8 @@
-package NIGGATESTING;
-
 import java.io.*;
 import java.util.Random;
 import java.util.Scanner;
 
-import Maquinaria.Cibercompresor;
-import Maquinaria.Ciberexcavadora;
-import Maquinaria.Martillo;
-import Maquinaria.Pala;
+
 
 public class GeneradorDAT {
     private static final String[] archivos = {

@@ -1,4 +1,4 @@
-package SQL;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -15,7 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import Maquinaria.Maquinaria;
+
 
 
 public class SQLUtil {
@@ -67,8 +67,6 @@ public class SQLUtil {
                 
                 Maquinaria datos = maquinaria[i][j]; // Extraemos el objeto Maquinaria
                 
-                
-    
                 switch (i) {
                     case 0: // mov_tierra.dat
                     System.out.printf(datos.toString());

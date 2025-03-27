@@ -1,4 +1,3 @@
-package Maquinaria;
 
 public class Martillo extends Maquinaria{
     int consumo;

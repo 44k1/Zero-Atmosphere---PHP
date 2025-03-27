@@ -1,4 +1,3 @@
-package Maquinaria;
 
 
 public class Cibercompresor extends Maquinaria{
