@@ -77,7 +77,7 @@ public class IABob {
     
 
     public static void modificarObjeto() {
-
+        
     }
     public static ArrayList<Entidad> crearListaSoldadosMineros(String opcion, ArrayList<Entidad> ListaSoldadosMineros, int numEsperadoAliens){
         Scanner sc = new Scanner(System.in);
