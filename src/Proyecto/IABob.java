@@ -8,7 +8,7 @@ import java.util.Random;
 public class IABob {
     private static final int filas = 4;
     private static final int columnas = 10;
-    private static String[][] maquinaria = new String[filas][columnas];
+    private static Maquinaria[][] maquinaria = new Maquinaria[filas][columnas];
     private static String[] archivos = {
         "C:\\ProyectoZero\\Zero-Atmosphere---PHP\\src\\Proyecto\\Utils\\mov_tierra.dat",
         "C:\\ProyectoZero\\Zero-Atmosphere---PHP\\src\\Proyecto\\Utils\\manual_pala.dat",
@@ -17,67 +17,64 @@ public class IABob {
     };
 
     public static void cargarDatos() {
-        for (int i = 0; i < filas; i++) {
-            try (DataInputStream dis = new DataInputStream(new FileInputStream(archivos[i]))) {
-                for (int j = 0; j < columnas; j++) {
-                    if (archivos[i].contains("manual_pala.dat")) {
-                        String nombre = dis.readUTF();   // Leer el nombre de la pala
-                        int lonMango = dis.readInt();    // Leer la longitud del mango
-                        String metal = dis.readUTF();    // Leer el tipo de metal
-                        String proteccion = dis.readUTF(); // Leer el tipo de protección
-                        maquinaria[i][j] = nombre + " " + lonMango + " " + metal + " " + proteccion;
-                    } else {
-                        String nombre = dis.readUTF();    // Leer el nombre del objeto
-                        int valor1 = dis.readInt();       // Leer el primer valor entero
-                        String tipo = dis.readUTF();      // Leer el tipo (ruedas/oruga)
-                        double valor2 = dis.readDouble(); // Leer el segundo valor numérico (double)
-                        maquinaria[i][j] = nombre + " " + valor1 + " " + tipo + " " + valor2;
-                    }
+            for (int i = 0; i < filas; i++) {
+                File f = new File(archivos[i]);
+    
+                if (!f.exists()) {
+                    System.err.println("Error: No se encontró el archivo " + archivos[i]);
+                    continue; // Salta a la siguiente iteración si el archivo no existe
                 }
-            } catch (IOException e) {
-                System.out.println("Error al cargar " + archivos[i]);
+    
+                try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f))) {
+                    for (int j = 0; j < columnas; j++) {
+                        maquinaria[i][j] = (Maquinaria) ois.readObject();
+    
+                    }
+                } catch (IOException | ClassNotFoundException e) {
+                    System.err.println("Error al leer el archivo " + archivos[i] + ": " + e.getMessage());
+                }
             }
         }
-    }
+    
 
-    public static void mostrarMaquinaria() {
+    public static String mostrarMaquinaria() {
         cargarDatos();
-        System.out.println("\nDatos en maquinaria:");
+        String listaMaquinaria = "";
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
                 if (maquinaria[i][j] == null) {
                     continue;
                 }
-                String[] datos = maquinaria[i][j].split(" ");
-                if (datos.length < 4) {
-                    System.out.println("[Datos incompletos]");
-                    continue;
-                }
+                Maquinaria datos = maquinaria[i][j]; // Extraemos el objeto Maquinaria
+    
                 switch (i) {
                     case 0: // mov_tierra.dat
-                        System.out.printf("Ciberexcavadora: %s, Consumo: %s L, Tracción: %s, Protección: %s\n",
-                                datos[0], datos[1], datos[2], datos[3]);
+                    listaMaquinaria+=datos.toString()+"\n";
                         break;
-                    case 1: // manual_pala.dat
-                        System.out.printf("Pala: %s, Longitud del Mango: %s m, Metal: %s, Protección: %s\n",
-                                datos[0], datos[1], datos[2], datos[3]);
+                    case 1: // martillo.dat
+                    listaMaquinaria+=datos.toString()+"\n";
+                    System.out.println("");
                         break;
-                    case 2: // martillo.dat
-                        System.out.printf("Martillo: %s, Consumo: %s KW, Sujeción: %s, Protección: %s\n",
-                                datos[0], datos[1], datos[2], datos[3]);
-                        break;
+                    case 2: //manual_pala.dat
+                    listaMaquinaria+=datos.toString()+"\n";  
+                    break;
                     case 3: // cibercompresor.dat
-                        System.out.printf("Cibercompresor: %s, Consumo: %s L, Tracción: %s, Protección: %s\n",
-                                datos[0], datos[1], datos[2], datos[3]);
+                    listaMaquinaria+=datos.toString()+"\n";  
                         break;
                 }
+                
             }
+            
         }
+        return listaMaquinaria;
     }
     
-
+    public static void main(String[] args) {
+        System.out.println(mostrarMaquinaria());;
+    }
     public static void modificarObjeto() {
-        
+        // TODO MIGUELANGEL MAROUAN
+        // Crear modificar objeto, meter metodos por cada tipo de maquinaria (4) e implementarlos AQUI
     }
     public static ArrayList<Entidad> crearListaSoldadosMineros(String opcion, ArrayList<Entidad> ListaSoldadosMineros, int numEsperadoAliens){
         Scanner sc = new Scanner(System.in);
@@ -174,20 +171,5 @@ public class IABob {
         }
         return ListaSoldadosMineros;
 }
-    public static void guardarDatos() {
-        for (int i = 0; i < filas; i++) {
-            try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(archivos[i]))) {
-                for (int j = 0; j < columnas; j++) {
-                    String[] partes = maquinaria[i][j].split(" ");
-                    // Escribir los datos en el archivo respetando la estructura
-                    dos.writeUTF(partes[0]);            // Escribir el nombre
-                    dos.writeInt(Integer.parseInt(partes[1]));  // Escribir el valor1
-                    dos.writeUTF(partes[2]);            // Escribir el tipo (ruedas/oruga)
-                    dos.writeDouble(Double.parseDouble(partes[3])); // Escribir el valor2
-                }
-            } catch (IOException e) {
-                System.out.println("Error al guardar " + archivos[i]);
-            }
-        }
-    }
+
 }

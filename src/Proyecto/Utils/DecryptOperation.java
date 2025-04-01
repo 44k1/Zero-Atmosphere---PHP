@@ -33,6 +33,28 @@ public class DecryptOperation {
             System.out.println("Error al leer el archivo: " + e.getMessage());
         }
     }
+    public static String decryptParaGUI(String password, String ficheroADescifrar) {
+        try {
+            // Leer el contenido del archivo
+            String encryptedText = new String(Files.readAllBytes(Paths.get(ficheroADescifrar)));
+
+            // Llamar al método de desencriptado
+            String decryptedText = decryptText(encryptedText, password);
+
+            // Mostrar el resultado desencriptado
+            
+            if (decryptedText!= null){ // != null, ya que si no se desencripta con exito retorna null, entonces lo evitamos..
+                System.out.println("<---- FICHERO DESENCRIPTADO ----->");
+                return decryptedText;
+            }
+            
+        } catch (NoSuchFileException e) {
+            System.out.println("Error --> El archivo no existe. Verifica la ruta y el nombre.");
+        } catch (IOException e) {
+            System.out.println("Error al leer el archivo: " + e.getMessage());
+        }
+        return null;
+    }
 
     // Método para desencriptar el texto usando la clave
     public static String decryptText(String encryptedText, String password) {

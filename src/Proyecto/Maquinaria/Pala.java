@@ -1,4 +1,3 @@
-package Maquinaria;
 
 
 public class Pala extends Maquinaria{
