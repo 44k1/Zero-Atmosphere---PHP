@@ -264,12 +264,13 @@ public class WesternMoon {
 
                     break;
                 case "3":
+                        if (loginSuccess!=true)break;
                         System.out.println("1. Mostrar Maquinaria.");
                         System.out.println("2. Modificar Maquinaria.");
                         String opcionMenuCase3 = sc.nextLine();
                         switch (opcionMenuCase3) {
                             case "1":
-                                IABob.mostrarMaquinaria();
+                                System.out.println(IABob.mostrarMaquinaria());
                                 break;
                             case "2":
                                 IABob.modificarObjeto();

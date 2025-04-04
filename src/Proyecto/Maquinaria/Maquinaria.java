@@ -9,6 +9,7 @@ public abstract class Maquinaria implements Serializable{
     public Maquinaria(String nombre){
         this.nombre=nombre;
     }
+    public abstract void modificarObjeto(String valor, String valora);
     @Override
     public String toString() {
 

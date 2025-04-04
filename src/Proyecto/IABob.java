@@ -73,8 +73,109 @@ public class IABob {
         System.out.println(mostrarMaquinaria());;
     }
     public static void modificarObjeto() {
-        // TODO MIGUELANGEL MAROUAN
-        // Crear modificar objeto, meter metodos por cada tipo de maquinaria (4) e implementarlos AQUI
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.println("\n--- MODIFICAR MAQUINARIA ---");
+        System.out.println("1. Pala");
+        System.out.println("2. Ciberexcavadora");
+        System.out.println("3. Martillo");
+        System.out.println("4. Cibercompresor");
+        System.out.print("Seleccione el tipo de maquinaria a modificar: ");
+        String tipoMaquinaria = sc.nextLine();
+    
+        try {
+            File file = null;
+            ArrayList<Maquinaria> maquinas = new ArrayList<>();
+            
+            // Determinar archivo según selección
+            switch(tipoMaquinaria) {
+                case "1":
+                    file = new File("src/Proyecto/Utils/manual_pala.dat");
+                    break;
+                case "2":
+                    file = new File("src/Proyecto/Utils/mov_tierra.dat");
+                    break;
+                case "3":
+                    file = new File("src/Proyecto/Utils/martillo.dat");
+                    break;
+                case "4":
+                    file = new File("src/Proyecto/Utils/cibercompresor.dat");
+                    break;
+                default:
+                    System.out.println("Opción no válida");
+                    return;
+            }
+    
+            // Leer objetos del archivo
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+                while(true) {
+                    try {
+                        Maquinaria m = (Maquinaria) ois.readObject();
+                        maquinas.add(m);
+                    } catch (EOFException e) {
+                        break; // Fin del archivo
+                    }
+                }
+            }
+    
+            // Mostrar lista de máquinas disponibles
+            System.out.println("\nLista de máquinas disponibles:");
+            for(int i = 0; i < maquinas.size(); i++) {
+                System.out.println((i+1) + ". " + maquinas.get(i).toString());
+            }
+    
+            // Seleccionar máquina a modificar
+            System.out.print("\nSeleccione el número de máquina a modificar: ");
+            int numMaquina = Integer.parseInt(sc.nextLine()) - 1;
+    
+            if(numMaquina < 0 || numMaquina >= maquinas.size()) {
+                System.out.println("Número de máquina no válido");
+                return;
+            }
+    
+            Maquinaria maquinaSeleccionada = maquinas.get(numMaquina);
+    
+            // Mostrar solo atributos modificables
+            System.out.println("\nAtributos modificables:");
+            if(maquinaSeleccionada instanceof Pala) {
+                System.out.println("2. Longitud del mango (1-5 metros)");
+                System.out.println("4. Protección (PVC/vinilo)");
+            } else if(maquinaSeleccionada instanceof Ciberexcavadora || 
+                     maquinaSeleccionada instanceof Martillo || 
+                     maquinaSeleccionada instanceof Cibercompresor) {
+                System.out.println("2. Consumo");
+                System.out.println("4. Protección (valor entre 0 y 1)");
+            }
+    
+            // Seleccionar atributo a modificar
+            System.out.print("\nSeleccione el número de atributo a modificar (2 o 4): ");
+            String numAtributo = sc.nextLine();
+    
+            // Validar que solo se puedan modificar los atributos 2 y 4
+            if(!numAtributo.equals("2") && !numAtributo.equals("4")) {
+                System.out.println("Error: Solo se pueden modificar los atributos 2 y 4");
+                return;
+            }
+    
+            // Ingresar nuevo valor
+            System.out.print("Ingrese el nuevo valor: ");
+            String nuevoValor = sc.nextLine();
+    
+            // Modificar el atributo usando el método específico de cada clase
+            maquinaSeleccionada.modificarObjeto(numAtributo, nuevoValor);
+    
+            // Guardar cambios en el archivo
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
+                for(Maquinaria m : maquinas) {
+                    oos.writeObject(m);
+                }
+                System.out.println("¡Modificación realizada con éxito!");
+            }
+    
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
     public static ArrayList<Entidad> crearListaSoldadosMineros(String opcion, ArrayList<Entidad> ListaSoldadosMineros, int numEsperadoAliens){
         Scanner sc = new Scanner(System.in);
