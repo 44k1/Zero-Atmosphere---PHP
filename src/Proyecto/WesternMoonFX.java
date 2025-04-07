@@ -628,95 +628,134 @@ public class WesternMoonFX extends Application {
         }
     }
 
+ 
     private void showMaquinariaScreen() {
         VBox layout = new VBox(20);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(20));
         layout.setStyle("-fx-background-color: linear-gradient(to bottom, #2a2a5a, #3a3a7a);");
-
+    
+        // Título
+        Label title = new Label("Gestión de Maquinaria");
+        title.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        title.setTextFill(Color.WHITE);
+        
+        // Opción para elegir entre SQL y BIN
+        Label lblOption = new Label("Seleccione el tipo de almacenamiento:");
+        lblOption.setTextFill(Color.WHITE);
+        
+        ToggleGroup storageGroup = new ToggleGroup();
+        RadioButton rbSQL = new RadioButton("SQL");
+        RadioButton rbBIN = new RadioButton("BIN");
+        rbSQL.setToggleGroup(storageGroup);
+        rbBIN.setToggleGroup(storageGroup);
+        rbSQL.setTextFill(Color.WHITE);
+        rbBIN.setTextFill(Color.WHITE);
+        
+        HBox optionBox = new HBox(15, rbSQL, rbBIN);
+        optionBox.setAlignment(Pos.CENTER);
+    
+        // Panel para opciones de maquinaria (inicialmente oculto)
+        VBox machineOptions = new VBox(15);
+        machineOptions.setAlignment(Pos.CENTER);
+        machineOptions.setVisible(false);
+        
         Button btnShowMachines = createStyledButton("Mostrar Maquinaria",
                 "-fx-background-color: #5a5a9a; -fx-text-fill: white;");
-        btnShowMachines.setOnAction(e -> showMachinesList());
-
+        
         Button btnModifyMachines = createStyledButton("Modificar Maquinaria",
                 "-fx-background-color: #5a5a9a; -fx-text-fill: white;");
-        btnModifyMachines.setOnAction(e -> modifyMachine());
-
+    
         Button btnBack = createStyledButton("Volver", "-fx-background-color: #4a4a8a; -fx-text-fill: white;");
         btnBack.setOnAction(e -> goBack());
-
-        layout.getChildren().addAll(btnShowMachines, btnModifyMachines, btnBack);
-
-        Scene scene = new Scene(layout, 500, 350);
+    
+        // Manejar selección de tipo de almacenamiento
+        storageGroup.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
+            machineOptions.setVisible(true);
+            
+            if (newVal == rbSQL) {
+                btnShowMachines.setOnAction(e -> {
+                    SQLUtil.mostrarMaquinaria();
+                    showAlert("Información", "Mostrando maquinaria desde SQL", "info");
+                });
+                
+                btnModifyMachines.setOnAction(e -> showModifyMachineDialog(true));
+            } else if (newVal == rbBIN) {
+                btnShowMachines.setOnAction(e -> {
+                    String maquinaria = IABob.mostrarMaquinaria();
+                    TextArea textArea = new TextArea(maquinaria);
+                    textArea.setEditable(false);
+                    textArea.setStyle("-fx-control-inner-background: #3a3a7a; -fx-text-fill: white; -fx-font-family: monospace;");
+                    
+                    Stage stage = new Stage();
+                    VBox root = new VBox(textArea);
+                    root.setStyle("-fx-background-color: #2a2a5a;");
+                    stage.setScene(new Scene(root, 600, 400));
+                    stage.setTitle("Maquinaria BIN");
+                    stage.show();
+                });
+                
+                btnModifyMachines.setOnAction(e -> showModifyMachineDialog(false));
+            }
+        });
+    
+        machineOptions.getChildren().addAll(btnShowMachines, btnModifyMachines);
+        layout.getChildren().addAll(title, lblOption, optionBox, machineOptions, btnBack);
+    
+        Scene scene = new Scene(layout, 500, 400);
         navigateTo(scene);
     }
-
-    private void showMachinesList() {
-        TextArea textArea = new TextArea();
-        textArea.setEditable(false);
-        textArea.setStyle("-fx-control-inner-background: #3a3a7a; -fx-text-fill: white; -fx-font-family: monospace;");
-
-        StringBuilder sb = new StringBuilder();
-        
-        sb.append(IABob.mostrarMaquinaria());
-
-        textArea.setText(sb.toString());
-
-        Button btnBack = createStyledButton("Volver", "-fx-background-color: #4a4a8a; -fx-text-fill: white;");
-        btnBack.setOnAction(e -> goBack());
-
-        VBox layout = new VBox(15, textArea, btnBack);
-        layout.setPadding(new Insets(20));
-        layout.setStyle("-fx-background-color: linear-gradient(to bottom, #2a2a5a, #3a3a7a);");
-
-        Scene scene = new Scene(layout, 700, 500);
-        navigateTo(scene);
-    }
-
-    private void modifyMachine() {
-        if (listaAeroCars.isEmpty()) {
-            showAlert("Error", "No hay aerocars disponibles para modificar", "error");
-            return;
-        }
-
-        Dialog<AeroCars> dialog = new Dialog<>();
-        dialog.setTitle("Modificar Aerocar");
-        dialog.setHeaderText("Selecciona un aerocar para modificar");
+    
+    private void showModifyMachineDialog(boolean isSQL) {
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Modificar Maquinaria");
+        dialog.setHeaderText("Seleccione el tipo de maquinaria a modificar");
         dialog.getDialogPane().setStyle("-fx-background-color: #3a3a7a;");
-
-        ButtonType modifyButton = new ButtonType("Modificar", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(modifyButton, ButtonType.CANCEL);
-
-        ComboBox<AeroCars> cbAerocars = new ComboBox<>();
-        cbAerocars.setItems(listaAeroCars);
-        cbAerocars.setStyle("-fx-background-color: #4a4a8a; -fx-text-fill: white;");
-
+    
+        ButtonType continueButton = new ButtonType("Continuar", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(continueButton, ButtonType.CANCEL);
+    
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(20));
         grid.setStyle("-fx-background-color: transparent;");
-
-        Label lblAerocar = new Label("Seleccionar Aerocar:");
-        lblAerocar.setTextFill(Color.WHITE);
-        grid.add(lblAerocar, 0, 0);
-        grid.add(cbAerocars, 1, 0);
-
+    
+        Label lblType = new Label("Tipo de maquinaria:");
+        lblType.setTextFill(Color.WHITE);
+        
+        ComboBox<String> cbType = new ComboBox<>();
+        if (isSQL) {
+            cbType.getItems().addAll("1. Ciberexcavadora", "2. Martillo", "3. Cibercompresor");
+        } else {
+            cbType.getItems().addAll("1. Pala", "2. Ciberexcavadora", "3. Martillo", "4. Cibercompresor");
+        }
+        cbType.setStyle("-fx-background-color: #4a4a8a; -fx-text-fill: white;");
+    
+        grid.add(lblType, 0, 0);
+        grid.add(cbType, 1, 0);
+    
         dialog.getDialogPane().setContent(grid);
-
+    
         dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == modifyButton) {
-                return cbAerocars.getValue();
+            if (dialogButton == continueButton) {
+                String selectedType = cbType.getValue();
+                if (selectedType != null) {
+                    String typeNumber = selectedType.substring(0, 1);
+                    if (isSQL) {
+                        SQLUtil.modificarObjeto();
+                    } else {
+                        IABob.modificarObjeto();
+                    }
+                }
             }
             return null;
         });
-
-        Optional<AeroCars> result = dialog.showAndWait();
-        result.ifPresent(aerocar -> {
-            showAlert("Info", "Aerocar seleccionado: " + aerocar.getNombre(), "info");
-            // Aquí podrías añadir más lógica para modificar el aerocar seleccionado
-        });
+    
+        dialog.showAndWait();
     }
+    
+    
 
     private void showListadoOperaciones() {
         try {

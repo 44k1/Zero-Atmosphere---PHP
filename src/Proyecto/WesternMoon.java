@@ -1,6 +1,3 @@
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 public class WesternMoon {
@@ -265,19 +262,45 @@ public class WesternMoon {
                     break;
                 case "3":
                         if (loginSuccess!=true)break;
-                        System.out.println("1. Mostrar Maquinaria.");
-                        System.out.println("2. Modificar Maquinaria.");
-                        String opcionMenuCase3 = sc.nextLine();
-                        switch (opcionMenuCase3) {
-                            case "1":
-                                System.out.println(IABob.mostrarMaquinaria());
+                        System.out.println("Desea utilizar SQL/BIN");
+                        String optMaq = sc.nextLine();
+                        switch (optMaq.toUpperCase()) {
+                            case "SQL":
+                            System.out.println("1. Mostrar Maquinaria.");
+                            System.out.println("2. Modificar Maquinaria.");
+                            String optMaquinariaSQL = sc.nextLine();
+                            switch (optMaquinariaSQL) {
+                                case "1":
+                                    SQLUtil.mostrarMaquinaria();
+                                    break;
+                                case "2":
+                                    SQLUtil.modificarObjeto();
+                                    break;
+                                default:
+                                 System.out.println("Introduce una opcion correcta.");
+                                    break;
+                                }
                                 break;
-                            case "2":
-                                IABob.modificarObjeto();
-                            default:
-                            System.out.println("Introduce una opcion correcta.");
+                            case "BIN":
+                            System.out.println("1. Mostrar Maquinaria.");
+                            System.out.println("2. Modificar Maquinaria.");
+                            String opcionMenuCase3 = sc.nextLine();
+                            switch (opcionMenuCase3) {
+                                case "1":
+                                    System.out.println(IABob.mostrarMaquinaria());
+                                    break;
+                                case "2":
+                                    IABob.modificarObjeto();
+                                    break;
+                                default:
+                                 System.out.println("Introduce una opcion correcta.");
+                                    break;
+                            }
                                 break;
+                        
+                            
                         }
+                        
                         
                     break;
                 case "4":

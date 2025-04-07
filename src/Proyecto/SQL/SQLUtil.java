@@ -13,10 +13,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Scanner;
-
-
-
 
 public class SQLUtil {
     static Scanner sc = new Scanner(System.in);
@@ -29,7 +27,7 @@ public class SQLUtil {
     static int columnas = 10;
     private static Maquinaria[][] maquinaria = new Maquinaria[filas][columnas];
 
-    public static void cargarMatriz() {
+    public static void cargarDatos() {
         for (int i = 0; i < filas; i++) {
             File f = new File(fichas[i]);
 
@@ -49,49 +47,132 @@ public class SQLUtil {
         }
     }
 
-    
 
-    public static void main(String[] args) {
-        cargarMatriz();
-        mostrarMaquinaria();
-        actualizacionSQL();
-    }
 
-    public static void mostrarMaquinaria() {
-        System.out.println("\nDatos en maquinaria:");
+    public static String mostrarMaquinaria() {
+        cargarDatos();
+        String listaMaquinaria = "";
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
                 if (maquinaria[i][j] == null) {
                     continue;
                 }
-                
                 Maquinaria datos = maquinaria[i][j]; // Extraemos el objeto Maquinaria
-                
+    
                 switch (i) {
                     case 0: // mov_tierra.dat
-                    System.out.printf(datos.toString());
-                    System.out.println("");
+                    listaMaquinaria+=datos.toString()+"\n";
                         break;
                     case 1: // martillo.dat
-                    System.out.printf(datos.toString());
+                    listaMaquinaria+=datos.toString()+"\n";
                     System.out.println("");
                         break;
                     case 2: // cibercompresor.dat
-                        System.out.printf(datos.toString());
-                        System.out.println("");     
+                    listaMaquinaria+=datos.toString()+"\n";  
                         break;
                 }
+                
             }
+            
         }
+        return listaMaquinaria;
     }
-    
+
+    public static void modificarObjeto() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("\n--- MODIFICAR MAQUINARIA SQL ---");
+        System.out.println("1. Ciberexcavadora");
+        System.out.println("2. Martillo");
+        System.out.println("3. Cibercompresor");
+        System.out.print("Seleccione el tipo de maquinaria a modificar: ");
+        String tipoMaquinaria = sc.nextLine();
+
+        try {
+            File file = null;
+            ArrayList<Maquinaria> maquinas = new ArrayList<>();
+
+            // Determinar archivo según selección
+            switch (tipoMaquinaria) {
+                case "1":
+                    file = new File("src/Proyecto/SQL/ficha1/mov_tierra.dat");
+                    break;
+                case "2":
+                    file = new File("src/Proyecto/SQL/ficha2/martillo.dat");
+                    break;
+                case "3":
+                    file = new File("src/Proyecto/SQL/ficha4/cibercompresor.dat");
+                    break;
+                default:
+                    System.out.println("Opción no válida");
+                    return;
+            }
+
+            // Leer objetos del archivo
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+                while (true) {
+                    try {
+                        Maquinaria m = (Maquinaria) ois.readObject();
+                        maquinas.add(m);
+                    } catch (EOFException e) {
+                        break; // Fin del archivo
+                    }
+                }
+            }
+
+            // Mostrar lista de máquinas disponibles
+            System.out.println("\nLista de máquinas disponibles:");
+            for (int i = 0; i < maquinas.size(); i++) {
+                System.out.println((i + 1) + ". " + maquinas.get(i).toString());
+            }
+
+            // Seleccionar máquina a modificar
+            System.out.print("\nSeleccione el número de máquina a modificar: ");
+            int numMaquina = Integer.parseInt(sc.nextLine()) - 1;
+
+            if (numMaquina < 0 || numMaquina >= maquinas.size()) {
+                System.out.println("Número de máquina no válido");
+                return;
+            }
+
+            Maquinaria maquinaSeleccionada = maquinas.get(numMaquina);
+
+            // Mostrar solo atributos modificables
+            System.out.println("\nAtributos modificables:");
+
+            if (maquinaSeleccionada instanceof Ciberexcavadora ||
+                    maquinaSeleccionada instanceof Martillo ||
+                    maquinaSeleccionada instanceof Cibercompresor) {
+                System.out.println("2. Consumo");
+            }
+
+            // Ingresar nuevo valor
+            System.out.print("Ingrese el nuevo valor para el consumo: ");
+            String nuevoValor = sc.nextLine();
+
+            // Modificar el atributo usando el método específico de cada clase
+            maquinaSeleccionada.modificarObjeto("2", nuevoValor);
+
+            // Guardar cambios en el archivo
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
+                for (Maquinaria m : maquinas) {
+                    oos.writeObject(m);
+                }
+                System.out.println("¡Modificación realizada con éxito!");
+            }
+
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        actualizacionSQL();
+    }
 
     public static void actualizacionSQL() {
         // Establecer la conexión con la base de datos
-        String url = "jdbc:mysql://localhost:3306/atmosferazero";  // Base de datos 'atmosferazero'
+        String url = "jdbc:mysql://localhost:3306/atmosferazero"; // Base de datos 'atmosferazero'
         String user = "root";
         String password = "mysql";
-
 
         try (Connection conn = DriverManager.getConnection(url, user, password)) {
             // Recorrer los archivos en el array 'fichas'
@@ -99,6 +180,11 @@ public class SQLUtil {
                 // Leer el archivo correspondiente
                 File archivo = new File(fichas[i]);
                 String tabla = determinarTabla(fichas[i]); // Obtener la tabla correspondiente
+                try (PreparedStatement stmtDEL = conn.prepareStatement("DELETE FROM " + tabla + ";")) {
+                    stmtDEL.executeUpdate();
+                } catch (SQLException e) {
+                    System.out.println("No se ha podido borrar la tabla: " + e.getMessage());
+                }
                 try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
                     int j = 0;
                     while (true) {
@@ -111,7 +197,7 @@ public class SQLUtil {
                             insertarObjetoSerializado(obj, conn, tabla);
                             j++;
                         } catch (EOFException e) {
-                            break;  // Fin del archivo
+                            break; // Fin del archivo
                         }
                     }
                 } catch (IOException | ClassNotFoundException e) {
@@ -138,24 +224,24 @@ public class SQLUtil {
     // Método para insertar el objeto serializado en la base de datos
     private static void insertarObjetoSerializado(Maquinaria obj, Connection conn, String tabla) {
         // SQL para insertar el objeto serializado en la base de datos
+        // String sql = "DELETE * FROM "+ tabla + " AND INSERT INTO " + tabla + "
+        // (objeto_serializado) VALUES (?)";
         String sql = "INSERT INTO " + tabla + " (objeto_serializado) VALUES (?)";
-
+        
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             // Serializar el objeto
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(baos);
             oos.writeObject(obj);
             byte[] objBytes = baos.toByteArray();
-            
+
             // Insertar el objeto serializado como BLOB
             stmt.setBytes(1, objBytes);
-            
+
             stmt.executeUpdate();
-            System.out.println("Insertado en tabla: " + tabla);
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
     }
-
 
 }
