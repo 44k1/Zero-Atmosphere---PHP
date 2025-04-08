@@ -42,7 +42,6 @@ public class DecryptOperation {
             String decryptedText = decryptText(encryptedText, password);
 
             // Mostrar el resultado desencriptado
-            
             if (decryptedText!= null){ // != null, ya que si no se desencripta con exito retorna null, entonces lo evitamos..
                 System.out.println("<---- FICHERO DESENCRIPTADO ----->");
                 return decryptedText;
@@ -71,7 +70,7 @@ public class DecryptOperation {
 
             return new String(decryptedText);
         } catch (IllegalBlockSizeException e){
-            System.out.println("ERROR, el fichero introducido no es multiplo de 16 o no esta codeado en BASE64 ");
+            System.out.println("ERROR, el valor introducido no es multiplo de 16 o no esta codeado en BASE64 ");
         } catch (BadPaddingException e){
             System.out.println("ERROR --> La key introducida no coincide con la utilizada para el cifrado.");
         }catch (Exception e) {

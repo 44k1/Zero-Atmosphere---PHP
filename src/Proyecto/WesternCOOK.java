@@ -38,7 +38,7 @@ public class WesternCOOK {
                     return;
             }
             
-            pb.inheritIO(); // Esto muestra la salida en la consola actual
+            pb.inheritIO(); 
             Process process = pb.start();
             process.waitFor();
             

@@ -32,7 +32,7 @@ public class WesternMoon {
                     try {
                         System.out.println("¿Quiere registrar un nuevo usuario? (true/false)");
                         boolean opt = sc.nextBoolean();
-                        sc.nextLine();
+                        
                         if (opt == true) {
                             System.out.println("Registrando usuario, introduce nombre del usuario");
                             user = sc.nextLine();
@@ -44,7 +44,7 @@ public class WesternMoon {
 
                         System.out.println("Error, debe introducir true o false");
                     }
-
+                    sc.nextLine();
                     System.out.println("Intentando iniciar sesión..., introduce nombre de usuario");
                     user = sc.nextLine();
                     System.out.println("Inicio de sesion para " + user);
@@ -266,12 +266,13 @@ public class WesternMoon {
                         String optMaq = sc.nextLine();
                         switch (optMaq.toUpperCase()) {
                             case "SQL":
+                            if (SQLUtil.testConexion()){System.out.println("Conexion establecida!");}else{System.out.println("ERROR -> No se puede conectar con la BD"); break;}
                             System.out.println("1. Mostrar Maquinaria.");
                             System.out.println("2. Modificar Maquinaria.");
                             String optMaquinariaSQL = sc.nextLine();
                             switch (optMaquinariaSQL) {
                                 case "1":
-                                    SQLUtil.mostrarMaquinaria();
+                                    System.out.println(SQLUtil.mostrarMaquinaria());
                                     break;
                                 case "2":
                                     SQLUtil.modificarObjeto();

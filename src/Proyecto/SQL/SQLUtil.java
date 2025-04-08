@@ -86,9 +86,10 @@ public class SQLUtil {
         System.out.println("2. Martillo");
         System.out.println("3. Cibercompresor");
         System.out.print("Seleccione el tipo de maquinaria a modificar: ");
-        String tipoMaquinaria = sc.nextLine();
+        
 
         try {
+            String tipoMaquinaria = sc.nextLine();
             File file = null;
             ArrayList<Maquinaria> maquinas = new ArrayList<>();
 
@@ -165,9 +166,15 @@ public class SQLUtil {
             System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
-        actualizacionSQL();
+        actualizacionSQL();        
     }
+    public static boolean testConexion(){
+        String url = "jdbc:mysql://localhost:3306/atmosferazero"; // Base de datos 'atmosferazero'
+        String user = "root";
+        String password = "mysql";
+        try (Connection testConect = DriverManager.getConnection(url, user, password)) {return true;} catch (SQLException e){return false;}
 
+    }
     public static void actualizacionSQL() {
         // Establecer la conexión con la base de datos
         String url = "jdbc:mysql://localhost:3306/atmosferazero"; // Base de datos 'atmosferazero'
@@ -205,8 +212,9 @@ public class SQLUtil {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("ERROR --> No se pudo conectar a la BD, intentelo de nuevo");    
         }
+       
     }
 
     // Método para determinar la tabla correspondiente según el archivo

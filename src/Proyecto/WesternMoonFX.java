@@ -675,8 +675,34 @@ public class WesternMoonFX extends Application {
             
             if (newVal == rbSQL) {
                 btnShowMachines.setOnAction(e -> {
-                    SQLUtil.mostrarMaquinaria();
-                    showAlert("Información", "Mostrando maquinaria desde SQL", "info");
+                    if (SQLUtil.testConexion()){
+                        String maquinaria = SQLUtil.mostrarMaquinaria();
+                        TextArea textArea = new TextArea(maquinaria);
+                        textArea.setEditable(false);
+                        textArea.setStyle("-fx-control-inner-background: #3a3a7a; -fx-text-fill: white; -fx-font-family: monospace;");
+                        Stage stage = new Stage();
+                        VBox root = new VBox(textArea);
+                        root.setStyle("-fx-background-color: #2a2a5a;");
+                        stage.setScene(new Scene(root, 600, 400));
+                        stage.setTitle("Maquinaria SQL");
+                        stage.show();
+
+                    }
+                    else{
+                        String error = "ERROR --> No se estableció conexion con SQL.";
+                        TextArea textArea = new TextArea(error);
+                        textArea.setEditable(false);
+                        textArea.setStyle("-fx-control-inner-background: #3a3a7a; -fx-text-fill: white; -fx-font-family: monospace;");
+                        Stage stage = new Stage();
+                        VBox root = new VBox(textArea);
+                        root.setStyle("-fx-background-color: #2a2a5a;");
+                        stage.setScene(new Scene(root, 600, 400));
+                        stage.setTitle("SQL ERROR");
+                        stage.show();
+
+                    }
+
+                        
                 });
                 
                 btnModifyMachines.setOnAction(e -> showModifyMachineDialog(true));
@@ -707,52 +733,7 @@ public class WesternMoonFX extends Application {
     }
     
     private void showModifyMachineDialog(boolean isSQL) {
-        Dialog<Void> dialog = new Dialog<>();
-        dialog.setTitle("Modificar Maquinaria");
-        dialog.setHeaderText("Seleccione el tipo de maquinaria a modificar");
-        dialog.getDialogPane().setStyle("-fx-background-color: #3a3a7a;");
-    
-        ButtonType continueButton = new ButtonType("Continuar", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(continueButton, ButtonType.CANCEL);
-    
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20));
-        grid.setStyle("-fx-background-color: transparent;");
-    
-        Label lblType = new Label("Tipo de maquinaria:");
-        lblType.setTextFill(Color.WHITE);
-        
-        ComboBox<String> cbType = new ComboBox<>();
-        if (isSQL) {
-            cbType.getItems().addAll("1. Ciberexcavadora", "2. Martillo", "3. Cibercompresor");
-        } else {
-            cbType.getItems().addAll("1. Pala", "2. Ciberexcavadora", "3. Martillo", "4. Cibercompresor");
-        }
-        cbType.setStyle("-fx-background-color: #4a4a8a; -fx-text-fill: white;");
-    
-        grid.add(lblType, 0, 0);
-        grid.add(cbType, 1, 0);
-    
-        dialog.getDialogPane().setContent(grid);
-    
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == continueButton) {
-                String selectedType = cbType.getValue();
-                if (selectedType != null) {
-                    String typeNumber = selectedType.substring(0, 1);
-                    if (isSQL) {
-                        SQLUtil.modificarObjeto();
-                    } else {
-                        IABob.modificarObjeto();
-                    }
-                }
-            }
-            return null;
-        });
-    
-        dialog.showAndWait();
+       
     }
     
     
